@@ -24,7 +24,10 @@ def test_consejo_success(monkeypatch):
 
     response = client.get("/api/consejo")
     assert response.status_code == 200
-    assert response.json() == {"recomendacion": "Compra Black Lotus"}
+    assert response.json() == {
+        "recomendacion": "Compra Black Lotus",
+        "items": [{"name": "Black Lotus"}],
+    }
 
 
 def test_consejo_model_error(monkeypatch):
@@ -39,7 +42,9 @@ def test_consejo_model_error(monkeypatch):
 
     response = client.get("/api/consejo")
     assert response.status_code == 200
-    assert response.json()["error"] == "El modelo de IA local no está activo o no responde."
+    data = response.json()
+    assert data["error"] == "El modelo de IA local no está activo o no responde."
+    assert data["items"] == [{"name": "Black Lotus"}]
 
 
 def test_consejo_summary_error(monkeypatch):
