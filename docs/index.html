@@ -1,7 +1,35 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=./kezan.html"/>
+  <meta charset="utf-8">
+  <title>Kezan Protocol Documentation</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    .lang { display: none; }
+  </style>
+  <script>
+    function show(lang) {
+      document.getElementById('en').style.display = lang === 'en' ? 'block' : 'none';
+      document.getElementById('es').style.display = lang === 'es' ? 'block' : 'none';
+    }
+  </script>
 </head>
+<body onload="show('en')">
+  <div>
+    <button onclick="show('en')">English</button>
+    <button onclick="show('es')">Español</button>
+  </div>
+  <div id="en" class="lang">
+    <h1>Kezan Protocol</h1>
+    <p>Kezan Protocol exposes a FastAPI application with routes from <code>kezan.api</code>.</p>
+    <p>The root endpoint <code>/</code> returns a welcome message.</p>
+    <p>See the <a href="kezan.html">API reference</a> for full details.</p>
+  </div>
+  <div id="es" class="lang">
+    <h1>Kezan Protocol</h1>
+    <p>Kezan Protocol expone una aplicación FastAPI con rutas de <code>kezan.api</code>.</p>
+    <p>El endpoint raíz <code>/</code> devuelve un mensaje de bienvenida.</p>
+    <p>Consulta la <a href="kezan.html">referencia de la API</a> para más detalles.</p>
+  </div>
+</body>
 </html>
