@@ -4,6 +4,17 @@
 
 Inspirado en la astucia de los goblins y potenciado por modelos de IA locales, este sistema convierte datos crudos del mercado en estrategias de oro optimizadas para tu perfil de jugador.
 
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
+
 ---
 
 ## 📌 Objetivo
@@ -16,6 +27,17 @@ Crear un sistema local capaz de:
 - Interactuar mediante comandos simples en consola, chat o web ligera.
 - Conectarse a una IA local para ofrecer estrategias personalizadas.
 
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
+
 ---
 
 ## 🏗️ Arquitectura del sistema
@@ -25,6 +47,17 @@ Crear un sistema local capaz de:
 - **Modelo**: GPT-OSS-20B (OpenAI, open-weight)
 - **Entorno**: PC local con GPU (RTX 3060 8GB)
 - **Framework**: Ollama / llama.cpp / LM Studio (según preferencia)
+
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
 
 ---
 
@@ -38,6 +71,17 @@ Crear un sistema local capaz de:
   - Exportaciones JSON desde el addon TradeSkillMaster.
   - Scraping de webs públicas (limitado).
 
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
+
 ---
 
 ### 3. Backend
@@ -50,6 +94,17 @@ Crear un sistema local capaz de:
   - Análisis de márgenes de beneficio
   - Filtrado por categorías y beneficios
   - Generación de resúmenes para IA
+
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
 
 ---
 
@@ -66,6 +121,17 @@ Crear un sistema local capaz de:
 - `Muéstrame las 5 gangas del día`
 - `Filtra solo consumibles con margen > 30%`
 - `¿Qué objetos puedo revender ahora con al menos 10g de beneficio?`
+
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
 
 ---
 
@@ -86,6 +152,17 @@ El backend estructura los datos en formato entendible para la IA:
   ]
 }
 ```
+
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
 
 ---
 
@@ -128,4 +205,16 @@ LM_MODEL=llama3
 - **"API keys no configuradas"**: asegúrate de definir `BLIZZ_CLIENT_ID` y `BLIZZ_CLIENT_SECRET` en tu archivo `.env`.
 - **El ejecutable se cierra al abrirse**: confirma que el archivo `.env` se encuentre junto al ejecutable y que ningún antivirus lo esté bloqueando.
 
+## 📄 Generar documentación en Word/PDF
+
+La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+
+```bash
+pip install -r requirements.txt
+python docs/generate_documents.py
+```
+
+Los archivos resultantes se guardarán en el mismo directorio `docs/`.
+
 ---
+
