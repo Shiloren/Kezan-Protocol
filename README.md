@@ -1,232 +1,121 @@
 # 🧠 Kezan Protocol
 
-**Kezan Protocol** es un asistente inteligente de análisis de mercado para World of Warcraft, diseñado para ayudarte a identificar oportunidades de reventa, crafting rentable y gangas en tiempo real dentro de la casa de subastas.
+Kezan Protocol es un asistente local que analiza la casa de subastas de World of Warcraft y genera recomendaciones de compra y venta usando modelos de lenguaje ejecutados en tu propio equipo.
 
-Inspirado en la astucia de los goblins y potenciado por modelos de IA locales, este sistema convierte datos crudos del mercado en estrategias de oro optimizadas para tu perfil de jugador.
+## Índice
+- [Arquitectura](#arquitectura)
+- [Requisitos](#requisitos)
+- [Instalación](#instalación)
+- [Configuración inicial](#configuración-inicial)
+- [Ejecución](#ejecución)
+  - [API HTTP](#api-http)
+  - [Interfaz de escritorio](#interfaz-de-escritorio)
+- [Flujo de datos paso a paso](#flujo-de-datos-paso-a-paso)
+- [Módulos principales](#módulos-principales)
+- [Generar documentación](#generar-documentación)
+- [Pruebas](#pruebas)
+- [Errores comunes](#errores-comunes)
 
-## 📄 Generar documentación en Word/PDF
+## Arquitectura
 
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+1. **Extracción de datos** – `blizzard_api` obtiene un token OAuth y descarga las subastas del reino configurado.
+2. **Análisis de mercado** – `analyzer` filtra los lotes más rentables y los formatea con `formatter`.
+3. **Análisis de crafteo** – `crafting_analyzer` evalúa recetas usando precios de mercado.
+4. **IA local** – `llm_interface` envía los datos a un modelo local (Ollama, LM Studio, etc.) para producir recomendaciones en español.
+5. **API y UI** – `api` expone endpoints REST, `main` monta la app de FastAPI y `desktop_app` consulta dichos endpoints ofreciendo una interfaz gráfica.
+6. **Persistencia y utilidades** – `cache` almacena tokens y resultados, `context_memory` guarda históricos, `export` permite volcar datos a CSV/JSON y `logger` mantiene registros rotativos.
+
+## Requisitos
+
+- Python 3.8–3.12
+- Dependencias listadas en `requirements.txt`
+- Credenciales de la API de Blizzard y un LLM local accesible por HTTP
+
+## Instalación
 
 ```bash
+git clone https://github.com/.../Kezan-Protocol.git
+cd Kezan-Protocol
 pip install -r requirements.txt
+```
+
+## Configuración inicial
+
+1. Copia `example.env` a `.env` y completa tus datos.
+2. Ejecuta el inicializador para validar las credenciales:
+
+```bash
+python -m kezan.initializer
+```
+
+Este script comprueba las claves con Blizzard y almacena los valores en `.env`.
+
+## Ejecución
+
+### API HTTP
+
+Inicia el servicio FastAPI:
+
+```bash
+uvicorn main:app --reload
+```
+
+Endpoints disponibles:
+
+- `GET /api/gangas` – lotes de subasta con mejor margen.
+- `GET /api/consejo` – recomendaciones de compra/venta usando la IA.
+- `GET /api/crafteables` – recetas rentables para una profesión.
+
+### Interfaz de escritorio
+
+La GUI de Tkinter consume la ruta `/api/consejo`:
+
+```bash
+python desktop_app.py
+```
+
+## Flujo de datos paso a paso
+
+1. **Token OAuth** – `get_access_token` solicita y cachea un token válido.
+2. **Descarga de subastas** – `fetch_auction_data` usa dicho token y almacena la respuesta cinco minutos.
+3. **Análisis** – `get_top_items` calcula margen estimado y devuelve los mejores lotes.
+4. **Formateo** – `format_for_ai` añade nombres legibles de los ítems y porcentajes.
+5. **Consulta IA** – `analyze_items_with_llm` envía la lista al modelo local y devuelve recomendaciones.
+6. **Respuesta API/GUI** – la ruta `/api/consejo` combina todo y la interfaz gráfica muestra el análisis.
+
+## Módulos principales
+
+| Módulo | Descripción |
+|--------|-------------|
+| `blizzard_api` | OAuth2 y descarga de datos de subasta. |
+| `analyzer` | Filtra lotes con mayor margen. |
+| `crafting_analyzer` | Calcula costos y beneficio de recetas de profesiones. |
+| `llm_interface` | Comunicación con modelos de lenguaje locales. |
+| `formatter` | Normaliza datos para la IA y resuelve nombres de ítems. |
+| `cache` | Cache simple persistente con TTL. |
+| `context_memory` | Historial de análisis con políticas de limpieza. |
+| `export` | Exportación a JSON/CSV. |
+| `logger` | Configuración común de logging. |
+
+## Generar documentación
+
+La carpeta `docs/` contiene la documentación HTML. Para crear versiones en Word y PDF:
+
+```bash
 python docs/generate_documents.py
 ```
 
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
+Los archivos se guardarán en `docs/documentacion_completa.docx` y `docs/documentacion_interna.pdf`.
 
----
+## Pruebas
 
-## 📌 Objetivo
-
-Crear un sistema local capaz de:
-
-- Analizar el mercado de subastas de WoW en tiempo real.
-- Detectar ítems con alto margen de beneficio.
-- Recomendar oportunidades de flipping o transformación con profesiones.
-- Interactuar mediante comandos simples en consola, chat o web ligera.
-- Conectarse a una IA local para ofrecer estrategias personalizadas.
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
+Ejecuta la suite de tests automatizados:
 
 ```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
+pytest
 ```
 
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
+## Errores comunes
 
----
-
-## 🏗️ Arquitectura del sistema
-
-### 1. Motor de IA local
-
-- **Modelo**: GPT-OSS-20B (OpenAI, open-weight)
-- **Entorno**: PC local con GPU (RTX 3060 8GB)
-- **Framework**: Ollama / llama.cpp / LM Studio (según preferencia)
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
-
-```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
-```
-
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
-
----
-
-### 2. Fuente de datos
-
-- **Primario**: API oficial de Blizzard
-  `https://{region}.api.blizzard.com/data/wow/connected-realm/{realmId}/auctions`
-  Requiere OAuth2 + `namespace=dynamic-{region}`
-
-- **Alternativas**:
-  - Exportaciones JSON desde el addon TradeSkillMaster.
-  - Scraping de webs públicas (limitado).
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
-
-```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
-```
-
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
-
----
-
-### 3. Backend
-
-- **Lenguaje**: Python
-- **Framework**: FastAPI
-- **Base de datos**: SQLite o PostgreSQL
-- **Lógica**:
-  - Conexión a la API
-  - Análisis de márgenes de beneficio
-  - Filtrado por categorías y beneficios
-  - Generación de resúmenes para IA
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
-
-```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
-```
-
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
-
----
-
-### 4. Interfaz
-
-**Modos posibles**:
-
-- Terminal interactivo (CLI)
-- Web ligera (FastAPI + frontend opcional)
-- Chat local con IA
-
-**Comandos esperados**:
-
-- `Muéstrame las 5 gangas del día`
-- `Filtra solo consumibles con margen > 30%`
-- `¿Qué objetos puedo revender ahora con al menos 10g de beneficio?`
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
-
-```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
-```
-
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
-
----
-
-## 🧠 Conexión con IA
-
-El backend estructura los datos en formato entendible para la IA:
-
-```json
-{
-  "items": [
-    {
-      "name": "Black Lotus",
-      "ah_price": 92,
-      "avg_sell_price": 145,
-      "stack_size": 1,
-      "estimated_margin": "57%"
-    }
-  ]
-}
-```
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
-
-```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
-```
-
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
-
----
-
-## 📦 Requisitos del sistema
-
-- CPU moderna con al menos 4 núcleos.
-- 8 GB de RAM (16 GB recomendados si ejecutas WoW y la IA al mismo tiempo).
-- Python 3.8–3.12 instalado (no se recomiendan versiones 3.13+).
-- Un modelo de lenguaje local (por ejemplo, `llama3`) servido desde Ollama o LM Studio.
-
-## 🚀 Instalación rápida (ejecutable)
-
-1. Descarga el ejecutable desde la sección de lanzamientos.
-2. Copia tu archivo `.env` en la misma carpeta que el ejecutable.
-3. Ejecuta `KezanAI` con doble clic o desde la terminal.
-
-> ℹ️ El archivo `.env` **no** se incrusta en el binario; debe estar siempre junto al ejecutable.
-
-### Compilación manual desde el código fuente
-
-Si necesitas generar el ejecutable tú mismo y evitar errores como `ModuleNotFoundError: No module named 'httpx'`, instala PyInstaller e incluye la dependencia explícitamente:
-
-```bash
-pip install -r requirements.txt
-pip install pyinstaller
-python -m PyInstaller --noconfirm --onefile --windowed --name "KezanProtocol" --hidden-import=httpx desktop_app.py
-# o usando el archivo .spec incluido
-python -m PyInstaller KezanProtocol.spec
-```
-
-## 💻 Uso
-
-1. Abre World of Warcraft.
-2. Inicia **KezanAI**.
-3. Pulsa **"Actualizar Datos"** para consultar la casa de subastas.
-4. Observa el análisis de la IA y las recomendaciones de compra o venta.
-
-## 🔧 Variables de entorno `.env`
-
-```ini
-BLIZZ_CLIENT_ID=
-BLIZZ_CLIENT_SECRET=
-REGION=eu
-REALM_ID=1080
-LM_ENDPOINT=http://localhost:11434
-LM_MODEL=llama3
-```
-
-## 🛠️ Solución de errores comunes
-
-- **"No se puede conectar al modelo IA"**: verifica que Ollama o LM Studio esté abierto y accesible en `LM_ENDPOINT`.
-- **"API keys no configuradas"**: asegúrate de definir `BLIZZ_CLIENT_ID` y `BLIZZ_CLIENT_SECRET` en tu archivo `.env`.
-- **El ejecutable se cierra al abrirse**: confirma que el archivo `.env` se encuentre junto al ejecutable y que ningún antivirus lo esté bloqueando.
-
-## 📄 Generar documentación en Word/PDF
-
-La documentación en formatos `.docx` y `.pdf` puede generarse localmente a partir de los archivos HTML en `docs/`.
-
-```bash
-pip install -r requirements.txt
-python docs/generate_documents.py
-```
-
-Los archivos resultantes se guardarán en el mismo directorio `docs/`.
-
----
-
+- **"Las claves de la API de Blizzard no están configuradas."** – asegúrate de que `.env` contiene `BLIZZ_CLIENT_ID` y `BLIZZ_CLIENT_SECRET`.
+- **"El modelo de IA local no está activo o no responde."** – confirma que el servicio en `LLM_API_URL` está en funcionamiento.
