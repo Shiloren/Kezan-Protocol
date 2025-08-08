@@ -1,8 +1,7 @@
-"""Utilities for loading profession recipes.
+"""Utilidades para cargar recetas de profesiones.
 
-This module can load recipe data from a local JSON file or, if properly
-configured, fetch it from the official Blizzard API.  Each recipe is
-represented as a dictionary with the following keys::
+Puede cargar datos desde un JSON local o, si está configurado, desde la API de
+Blizzard. Cada receta se representa como::
 
     {
         "recipe_id": int,
@@ -13,8 +12,8 @@ represented as a dictionary with the following keys::
         "level_required": int,
     }
 
-The module provides lightweight helpers used by the crafting analyzer to
-evaluate the profitability of crafting different items.
+El módulo ofrece helpers ligeros usados por el analizador de crafteo para
+evaluar la rentabilidad de distintas recetas.
 """
 
 from __future__ import annotations
@@ -31,27 +30,18 @@ from kezan.config import API_CLIENT_ID, API_CLIENT_SECRET, REGION
 
 @lru_cache(maxsize=32)
 def load_recipes(profesion: str, json_file: str | None = None) -> List[Dict]:
-    """Load recipes for ``profesion``.
+    """Carga las recetas para ``profesion``.
 
-    Parameters
-    ----------
-    profesion:
-        Name of the profession to load.
-    json_file:
-        Optional path to a local JSON file containing recipe data.  When
-        provided, no remote requests are performed.
+    Parámetros:
+    - profesion (str): nombre de la profesión.
+    - json_file (str | None): ruta opcional a JSON local con datos.
 
-    Returns
-    -------
-    List[Dict]
-        List of recipe dictionaries.
+    Retorna:
+    - List[Dict]: listado de recetas.
 
-    Raises
-    ------
-    RuntimeError
-        If the data cannot be retrieved.
+    Lanza:
+    - RuntimeError: si los datos no pueden recuperarse.
     """
-
     if json_file:
         data = json.loads(Path(json_file).read_text())
         return data.get(profesion, [])
@@ -70,12 +60,11 @@ def load_recipes(profesion: str, json_file: str | None = None) -> List[Dict]:
 
 
 def build_recipe_maps(recipes: List[Dict]) -> Tuple[Dict[int, Dict], Dict[int, Dict]]:
-    """Return mappings for quick recipe lookup.
+    """Retorna mapeos para búsqueda rápida de recetas.
 
-    Returns two dictionaries: one indexed by ``recipe_id`` and another by
+    Devuelve dos diccionarios: uno indexado por ``recipe_id`` y otro por
     ``product_id``.
     """
-
     by_recipe_id = {r["recipe_id"]: r for r in recipes}
     by_product_id = {r["product_id"]: r for r in recipes}
     return by_recipe_id, by_product_id

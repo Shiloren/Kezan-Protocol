@@ -1,3 +1,5 @@
+"""Interface para analizar datos mediante un LLM local."""
+
 import json
 import os
 import time
@@ -6,7 +8,7 @@ from typing import List, Dict, Optional
 import httpx
 import logging
 
-# Configuration for the local LLM endpoint
+# Configuración para el endpoint local del LLM
 LLM_API_URL = os.getenv("LLM_API_URL", "http://localhost:11434/api/generate")
 LLM_MODEL = os.getenv("LLM_MODEL", "mistral")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.7"))
@@ -14,22 +16,16 @@ LLM_TOP_P = float(os.getenv("LLM_TOP_P", "0.9"))
 
 
 def analyze_items_with_llm(data: List[Dict]) -> str:
-    """Send auction item data to a local LLM for analysis.
+    """Envía datos de subasta a un LLM local para su análisis.
 
-    Parameters
-    ----------
-    data: List[Dict]
-        List of auction items already formatted for AI consumption.
+    Parámetros:
+    - data (List[Dict]): lista de items formateados para la IA.
 
-    Returns
-    -------
-    str
-        Textual recommendation produced by the local LLM.
+    Retorna:
+    - str: recomendación generada por el modelo.
 
-    Raises
-    ------
-    RuntimeError
-        If the local model is not reachable or returns an invalid response.
+    Lanza:
+    - RuntimeError: si el modelo no responde o la respuesta es inválida.
     """
     prompt = (
         "Eres un asistente experto en el mercado de World of Warcraft. "
@@ -62,24 +58,15 @@ def analyze_items_with_llm(data: List[Dict]) -> str:
 
 
 def analyze_recipes_with_llm(data: List[Dict], inventory: Optional[List[int]] = None) -> str:
-    """Evaluate crafting recipes using the local LLM.
+    """Evalúa recetas de crafteo usando el LLM local.
 
-    Parameters
-    ----------
-    data: List[Dict]
-        List of recipe analysis dictionaries. Each entry should include
-        at minimum ``recipe_id`` and ``profit`` fields.
-    inventory: Optional[List[int]]
-        Optional list of item IDs that the user already possesses.  This
-        allows the model to reason about which crafts are more convenient
-        given existing materials.
+    Parámetros:
+    - data (List[Dict]): resultados de análisis de recetas.
+    - inventory (Optional[List[int]]): IDs de items ya disponibles.
 
-    Returns
-    -------
-    str
-        Recommendation text produced by the LLM.
+    Retorna:
+    - str: texto de recomendación generado por el modelo.
     """
-
     prompt = (
         "Eres un maestro artesano de World of Warcraft. Analiza las "
         "siguientes recetas y recomienda los crafteos más rentables en Español:\n"

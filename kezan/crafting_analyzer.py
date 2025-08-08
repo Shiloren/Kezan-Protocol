@@ -1,4 +1,4 @@
-"""Economic analysis of crafting recipes."""
+"""Análisis económico de recetas de crafteo."""
 
 from __future__ import annotations
 
@@ -13,20 +13,13 @@ def build_analyzer(
     price_lookup: Callable[[int], float],
     scarce: Optional[Set[int]] = None,
 ):
-    """Create a cached recipe analyzer.
+    """Crea un analizador de recetas con caché.
 
-    Parameters
-    ----------
-    recipes:
-        Iterable of recipe dictionaries as described in ``recipes.py``.
-    price_lookup:
-        Callable returning the market price for a given item id.  It may
-        raise an exception if the price is unknown.
-    scarce:
-        Optional set of item IDs that should be penalised (10% markup) when
-        calculating reagent costs.
+    Parámetros:
+    - recipes (Iterable[Dict]): recetas según formato de ``recipes.py``.
+    - price_lookup (Callable[[int], float]): función que retorna precio de mercado por ID.
+    - scarce (Optional[Set[int]]): conjunto de IDs escasos con recargo del 10%.
     """
-
     recipe_map = {r["recipe_id"]: r for r in recipes}
     product_map = {r["product_id"]: r for r in recipes}
     scarce = scarce or set()
@@ -85,8 +78,7 @@ def analyze_recipes(
     price_lookup: Callable[[int], float],
     scarce: Optional[Set[int]] = None,
 ) -> List[Dict]:
-    """Analyze multiple recipes and return their economic metrics."""
-
+    """Analiza múltiples recetas y devuelve sus métricas económicas."""
     analyzer = build_analyzer(recipes, price_lookup, scarce)
     return [analyzer(r["recipe_id"]) for r in recipes]
 
