@@ -1,7 +1,6 @@
 """Cobertura adicional para el inicializador de credenciales."""
 
 import builtins
-from pathlib import Path
 import httpx
 
 from kezan import initializer
@@ -155,7 +154,9 @@ def test_prompt_gui_network_error(monkeypatch):
 
     monkeypatch.setattr(initializer, "tk", DummyTk)
     monkeypatch.setattr(initializer, "simpledialog", DummyDialog)
-    monkeypatch.setattr(initializer, "_try_request_token", lambda *a: (False, "Network error"))
+    monkeypatch.setattr(
+        initializer, "_try_request_token", lambda *a: (False, "Network error")
+    )
     assert not initializer.prompt_for_credentials_gui()
 
 
@@ -163,4 +164,3 @@ def test_ensure_credentials_valid(monkeypatch):
     """Si las credenciales son válidas no se solicita nada."""
     monkeypatch.setattr(initializer, "check_credentials_validity", lambda: True)
     assert initializer.ensure_credentials()
-

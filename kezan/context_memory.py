@@ -25,8 +25,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
+from kezan.logger import get_logger
 
 load_dotenv()
+logger = get_logger(__name__)
 
 _DEFAULT_PATH = Path.home() / ".kezan" / "context.json"
 
@@ -97,17 +99,21 @@ def load_context_from_csv(csv_path: str, path: Optional[str] = None) -> None:
     """Carga entradas de contexto desde un CSV y las fusiona con las existentes."""
     dest = Path(path) if path else _DEFAULT_PATH
     rows: List[Dict[str, Any]] = []
-    with open(csv_path, newline="", encoding="utf-8") as fh:
-        reader = csv.DictReader(fh)
-        for row in reader:
-            ts = row.get("timestamp")
-            if not ts:
-                continue
-            try:
-                datetime.fromisoformat(ts)
-            except ValueError:
-                continue
-            rows.append(row)
+    try:
+        with open(csv_path, newline="", encoding="utf-8") as fh:
+            reader = csv.DictReader(fh, strict=True)
+            for row in reader:
+                ts = row.get("timestamp")
+                if not ts:
+                    continue
+                try:
+                    datetime.fromisoformat(ts)
+                except ValueError:
+                    continue
+                rows.append(row)
+    except (FileNotFoundError, csv.Error) as exc:
+        logger.error("Error leyendo CSV %s: %s", csv_path, exc)
+        return
     if not rows:
         return
     data = load_context(dest)

@@ -5,8 +5,8 @@ import sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
 
-from kezan.changelog import log_change
-from kezan.version import __version__
+from kezan.changelog import log_change  # noqa: E402
+from kezan.version import __version__  # noqa: E402
 
 
 def test_log_change(tmp_path):
@@ -17,8 +17,9 @@ def test_log_change(tmp_path):
 
 
 def test_version_cli():
-    out = subprocess.check_output(
-        [sys.executable, "-m", "kezan.version"], cwd=ROOT
-    ).decode().strip()
+    out = (
+        subprocess.check_output([sys.executable, "-m", "kezan.version"], cwd=ROOT)
+        .decode()
+        .strip()
+    )
     assert out == __version__
-

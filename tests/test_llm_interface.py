@@ -33,6 +33,7 @@ def test_analyze_items_with_llm_empty(monkeypatch):
 
 def test_analyze_items_with_llm_error(monkeypatch):
     """Lanza error si la solicitud falla."""
+
     def fake_post(*a, **k):
         raise httpx.HTTPError("fail")
 
@@ -50,6 +51,7 @@ def test_analyze_recipes_with_llm(monkeypatch):
 
 def test_analyze_recipes_with_llm_error(monkeypatch):
     """Lanza error si el LLM no responde."""
+
     def boom(*a, **k):
         raise httpx.HTTPError("fail")
 
@@ -63,3 +65,24 @@ def test_analyze_recipes_with_llm_empty(monkeypatch):
     monkeypatch.setattr(httpx, "post", lambda *a, **k: Resp({"response": ""}))
     with pytest.raises(RuntimeError):
         llm_interface.analyze_recipes_with_llm([{}])
+
+
+def test_load_model_template_missing_dir(monkeypatch):
+    """Falla si el directorio de modelos no existe."""
+
+    monkeypatch.setattr(
+        llm_interface, "validate_local_model_path", lambda path=None: False
+    )
+    with pytest.raises(FileNotFoundError):
+        llm_interface.load_model_template("modelo")
+
+
+def test_load_model_template_missing_file(monkeypatch, tmp_path):
+    """Falla si la plantilla solicitada no está disponible."""
+
+    monkeypatch.setattr(
+        llm_interface, "validate_local_model_path", lambda path=None: True
+    )
+    monkeypatch.setattr(llm_interface, "LOCAL_MODELS_PATH", tmp_path)
+    with pytest.raises(FileNotFoundError):
+        llm_interface.load_model_template("modelo")

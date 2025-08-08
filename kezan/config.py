@@ -9,6 +9,7 @@ It exposes four configuration constants that can be overridden via environment v
 - ``REGION``: Blizzard API region (e.g. "eu", "us").
 - ``REALM_ID``: Connected realm ID for auction data.
 """
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -30,12 +31,10 @@ LOCAL_MODELS_PATH = os.getenv(
 
 def has_blizzard_credentials() -> bool:
     """Return True if Blizzard API credentials are defined."""
-
     return bool(API_CLIENT_ID and API_CLIENT_SECRET and REGION)
 
 
 def validate_local_model_path(path: str | None = None) -> bool:
     """Validate that a local model directory exists."""
-
     target = Path(path or LOCAL_MODELS_PATH)
     return target.is_dir()

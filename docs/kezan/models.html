@@ -67,18 +67,25 @@
                     <h1 class="modulename">
 <a href="./../kezan.html">kezan</a><wbr>.models    </h1>
 
-                
+                        <div class="docstring"><p>Modelos de datos usados por Kezan Protocol.</p>
+</div>
+
                         <input id="mod-models-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-models-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AuctionItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a>    <span class="n">ah_price</span><span class="p">:</span> <span class="nb">float</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a>    <span class="n">avg_sell_price</span><span class="p">:</span> <span class="nb">float</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;Modelos de datos usados por Kezan Protocol.&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AuctionItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Representa un item de subasta analizado.&quot;&quot;&quot;</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">ah_price</span><span class="p">:</span> <span class="nb">float</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">avg_sell_price</span><span class="p">:</span> <span class="nb">float</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span>
 </span></pre></div>
 
 
@@ -94,45 +101,17 @@
 
     </div>
     <a class="headerlink" href="#AuctionItem"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AuctionItem-4"><a href="#AuctionItem-4"><span class="linenos">4</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AuctionItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="AuctionItem-5"><a href="#AuctionItem-5"><span class="linenos">5</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="AuctionItem-6"><a href="#AuctionItem-6"><span class="linenos">6</span></a>    <span class="n">ah_price</span><span class="p">:</span> <span class="nb">float</span>
-</span><span id="AuctionItem-7"><a href="#AuctionItem-7"><span class="linenos">7</span></a>    <span class="n">avg_sell_price</span><span class="p">:</span> <span class="nb">float</span>
-</span><span id="AuctionItem-8"><a href="#AuctionItem-8"><span class="linenos">8</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AuctionItem-7"><a href="#AuctionItem-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AuctionItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="AuctionItem-8"><a href="#AuctionItem-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Representa un item de subasta analizado.&quot;&quot;&quot;</span>
+</span><span id="AuctionItem-9"><a href="#AuctionItem-9"><span class="linenos"> 9</span></a>
+</span><span id="AuctionItem-10"><a href="#AuctionItem-10"><span class="linenos">10</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="AuctionItem-11"><a href="#AuctionItem-11"><span class="linenos">11</span></a>    <span class="n">ah_price</span><span class="p">:</span> <span class="nb">float</span>
+</span><span id="AuctionItem-12"><a href="#AuctionItem-12"><span class="linenos">12</span></a>    <span class="n">avg_sell_price</span><span class="p">:</span> <span class="nb">float</span>
+</span><span id="AuctionItem-13"><a href="#AuctionItem-13"><span class="linenos">13</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>!!! abstract "Usage Documentation"
-    <a href="../concepts/models.md">Models</a></p>
-
-<p>A base class for creating Pydantic models.</p>
-
-<p>Attributes:
-    __class_vars__: The names of the class variables defined on the model.
-    __private_attributes__: Metadata about the private attributes of the model.
-    __signature__: The synthesized <code><a href="#AuctionItem.__init__">__init__</a></code> [<code>Signature</code>][inspect.Signature] of the model.</p>
-
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The core schema of the model.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].
-__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.
-__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.
-
-__pydantic_fields__: A dictionary of field names and their corresponding [`FieldInfo`][pydantic.fields.FieldInfo] objects.
-__pydantic_computed_fields__: A dictionary of computed field names and their corresponding [`ComputedFieldInfo`][pydantic.fields.ComputedFieldInfo] objects.
-
-__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]
-    is set to `'allow'`.
-__pydantic_fields_set__: The names of fields explicitly set during instantiation.
-__pydantic_private__: Values of private attributes set on the model instance.
-</code></pre>
+            <div class="docstring"><p>Representa un item de subasta analizado.</p>
 </div>
 
 
