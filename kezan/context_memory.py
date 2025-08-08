@@ -20,7 +20,7 @@ from __future__ import annotations
 import csv
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -46,7 +46,7 @@ def _clean(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Elimina entradas que exceden los límites configurados."""
     max_entries, max_days = _get_limits()
     if max_days > 0:
-        cutoff = datetime.utcnow() - timedelta(days=max_days)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=max_days)
         cleaned: List[Dict[str, Any]] = []
         for entry in data:
             ts = entry.get("timestamp")
@@ -84,7 +84,7 @@ def load_context(path: Optional[str] = None) -> List[Dict[str, Any]]:
 def append_context(entry: Dict[str, Any], path: Optional[str] = None) -> None:
     """Agrega una nueva entrada de análisis al contexto."""
     entry = dict(entry)
-    entry.setdefault("timestamp", datetime.utcnow().isoformat())
+    entry.setdefault("timestamp", datetime.now(timezone.utc).isoformat())
     data = load_context(path)
     data.append(entry)
     data = _clean(data)
