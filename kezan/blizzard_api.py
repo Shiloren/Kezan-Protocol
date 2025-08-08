@@ -1,5 +1,4 @@
 import httpx
-import os
 
 from kezan.config import API_CLIENT_ID, API_CLIENT_SECRET, REGION, REALM_ID
 
