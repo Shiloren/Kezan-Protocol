@@ -1,18 +1,18 @@
-"""Utilities for managing persistent analysis context.
+"""Herramientas para gestionar el contexto persistente de análisis.
 
-This module stores analysis context entries on disk using JSON.  To avoid
-unbounded growth it supports two pruning strategies that can be configured via
-environment variables:
+Las entradas se almacenan en disco mediante JSON. Para evitar crecimiento
+indefinido se aplican dos políticas configurables mediante variables de
+entorno:
 
 ``CTX_MAX_ENTRIES``
-    Maximum number of entries to keep.  Older entries are discarded first.
+    Número máximo de entradas a conservar; las más antiguas se descartan.
 
 ``CTX_MAX_DAYS``
-    Maximum age (in days) allowed for entries.  Older entries are removed.
+    Antigüedad máxima permitida en días; se eliminan entradas más viejas.
 
-Entries are automatically timestamped and cleaned whenever the context is
-loaded or updated.  A helper is also provided to import context entries from a
-CSV file.
+Las entradas se marcan con marca de tiempo y se limpian automáticamente al
+cargarse o actualizarse. También se puede importar contexto desde un archivo
+CSV.
 """
 
 from __future__ import annotations
@@ -32,14 +32,18 @@ _DEFAULT_PATH = Path.home() / ".kezan" / "context.json"
 
 
 def _get_limits() -> tuple[int, int]:
-    """Return pruning limits from environment variables."""
+    """Obtiene los límites de poda desde variables de entorno.
+
+    Retorna:
+    - tuple[int, int]: ``(max_entries, max_days)``.
+    """
     max_entries = int(os.getenv("CTX_MAX_ENTRIES", "100"))
     max_days = int(os.getenv("CTX_MAX_DAYS", "30"))
     return max_entries, max_days
 
 
 def _clean(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Remove entries exceeding configured limits."""
+    """Elimina entradas que exceden los límites configurados."""
     max_entries, max_days = _get_limits()
     if max_days > 0:
         cutoff = datetime.utcnow() - timedelta(days=max_days)
@@ -61,7 +65,7 @@ def _clean(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def load_context(path: Optional[str] = None) -> List[Dict[str, Any]]:
-    """Load stored analysis context applying cleanup policies."""
+    """Carga el contexto almacenado aplicando las políticas de limpieza."""
     p = Path(path) if path else _DEFAULT_PATH
     if p.exists():
         try:
@@ -78,7 +82,7 @@ def load_context(path: Optional[str] = None) -> List[Dict[str, Any]]:
 
 
 def append_context(entry: Dict[str, Any], path: Optional[str] = None) -> None:
-    """Append a new analysis ``entry`` to the context store."""
+    """Agrega una nueva entrada de análisis al contexto."""
     entry = dict(entry)
     entry.setdefault("timestamp", datetime.utcnow().isoformat())
     data = load_context(path)
@@ -90,7 +94,7 @@ def append_context(entry: Dict[str, Any], path: Optional[str] = None) -> None:
 
 
 def load_context_from_csv(csv_path: str, path: Optional[str] = None) -> None:
-    """Load context entries from a CSV file and merge them with existing data."""
+    """Carga entradas de contexto desde un CSV y las fusiona con las existentes."""
     dest = Path(path) if path else _DEFAULT_PATH
     rows: List[Dict[str, Any]] = []
     with open(csv_path, newline="", encoding="utf-8") as fh:

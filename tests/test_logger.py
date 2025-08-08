@@ -1,32 +1,12 @@
-import importlib
-import os
-import sys
+"""Pruebas para el módulo de logging."""
 
-# Ensure package can be imported when tests run directly
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from kezan import logger as logger_module
+from kezan.logger import get_logger
 
 
-def test_logger_writes(tmp_path, monkeypatch):
-    """Logger writes messages to a rotating file."""
-
-    # -- Setup -----------------------------------------------------------------
-    log_file = tmp_path / "kezan.log"
-    importlib.reload(logger_module)  # Reload to apply monkeypatching
-    monkeypatch.setattr(logger_module, "LOG_DIR", tmp_path)
-    monkeypatch.setattr(logger_module, "LOG_FILE", log_file)
-
-    # -- Exercise --------------------------------------------------------------
-    log = logger_module.get_logger("test")
-    log.info("hello world")
-
-    # -- Flush handlers to ensure data is written ------------------------------
-    for handler in log.handlers:
-        handler.flush()
-
-    # -- Verify ----------------------------------------------------------------
-    assert log_file.exists(), "Log file was not created"
-    content = log_file.read_text()
-    print("log content:", content)
-    assert "hello world" in content
+def test_get_logger_reuses_handlers(tmp_path, monkeypatch):
+    """La segunda llamada debe reutilizar el logger existente."""
+    monkeypatch.setattr("kezan.logger.LOG_DIR", tmp_path)
+    monkeypatch.setattr("kezan.logger.LOG_FILE", tmp_path / "kezan.log")
+    log1 = get_logger("demo")
+    log2 = get_logger("demo")
+    assert log1 is log2

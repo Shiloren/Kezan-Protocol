@@ -1,9 +1,9 @@
-"""Package version information."""
+"""Información de versión del paquete."""
 __version__ = "1.3.0"
 
 
 def main() -> None:
-    """Print the current package version."""
+    """Imprime la versión actual del paquete."""
     print(__version__)
 
 

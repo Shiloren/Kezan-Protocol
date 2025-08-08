@@ -1,3 +1,5 @@
+"""Módulo para analizar items de subasta."""
+
 from kezan.blizzard_api import fetch_auction_data
 from kezan.formatter import format_for_ai
 from kezan.logger import get_logger
@@ -5,17 +7,15 @@ from kezan import cache
 
 logger = get_logger(__name__)
 
-async def get_top_items(limit=5, min_margin=0.3):
-    """
-    Retrieves the top auction items with margins above ``min_margin``.
+async def get_top_items(limit: int = 5, min_margin: float = 0.3):
+    """Obtiene los items de subasta con mayor margen.
 
-    If the Blizzard API is not configured via environment variables,
-    a RuntimeError will be caught and a dictionary with an "error"
-    message will be returned instead.
+    Parámetros:
+    - limit (int): número máximo de items a devolver.
+    - min_margin (float): margen mínimo requerido para incluir un item.
 
-    :param limit: Maximum number of items to return.
-    :param min_margin: Minimum margin required for an item to be included.
-    :return: A list of dictionaries representing the top items or an error dict.
+    Retorna:
+    - dict: diccionario con los items principales o un mensaje de error.
     """
     cache_key = f"top_items_{limit}_{min_margin}"
     cached = cache.get(cache_key)

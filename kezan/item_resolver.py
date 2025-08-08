@@ -1,4 +1,4 @@
-"""Resolve human-readable item names using the Blizzard API."""
+"""Resuelve nombres legibles de items usando la API de Blizzard."""
 from __future__ import annotations
 
 from typing import Dict
@@ -16,7 +16,7 @@ _name_cache: Dict[int, str] = {}
 
 
 def _get_access_token() -> str:
-    """Retrieve and cache an OAuth2 token for the Blizzard API."""
+    """Obtiene y cachea un token OAuth2 para la API de Blizzard."""
     global _token_cache
     if _token_cache:
         return _token_cache
@@ -36,10 +36,9 @@ def _get_access_token() -> str:
 
 
 def resolve_item_name(item_id: int) -> str:
-    """Return the human readable name for the given item id.
+    """Devuelve el nombre legible del item indicado.
 
-    If the request fails for any reason, a fallback string "ItemID xxxx" is
-    returned instead.
+    Si la solicitud falla, se devuelve "ItemID xxxx" como alternativa.
     """
     if not item_id:
         return "ItemID unknown"
