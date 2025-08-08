@@ -181,6 +181,18 @@ Los archivos resultantes se guardarán en el mismo directorio `docs/`.
 
 > ℹ️ El archivo `.env` **no** se incrusta en el binario; debe estar siempre junto al ejecutable.
 
+### Compilación manual desde el código fuente
+
+Si necesitas generar el ejecutable tú mismo y evitar errores como `ModuleNotFoundError: No module named 'httpx'`, instala PyInstaller e incluye la dependencia explícitamente:
+
+```bash
+pip install -r requirements.txt
+pip install pyinstaller
+python -m PyInstaller --noconfirm --onefile --windowed --name "KezanProtocol" --hidden-import=httpx desktop_app.py
+# o usando el archivo .spec incluido
+python -m PyInstaller KezanProtocol.spec
+```
+
 ## 💻 Uso
 
 1. Abre World of Warcraft.
