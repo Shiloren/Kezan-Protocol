@@ -15,10 +15,11 @@ import os
 
 import httpx
 from dotenv import load_dotenv
+from kezan.logger import get_logger
 
 try:  # GUI imports (optional during unit tests)
     import tkinter as tk
-    from tkinter import simpledialog, messagebox
+    from tkinter import simpledialog
 except Exception:  # pragma: no cover - Tkinter may be absent in tests
     tk = None  # type: ignore
     simpledialog = None  # type: ignore
@@ -26,6 +27,8 @@ except Exception:  # pragma: no cover - Tkinter may be absent in tests
 
 ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 REQUIRED_VARS = ["BLIZZ_CLIENT_ID", "BLIZZ_CLIENT_SECRET", "REGION", "REALM_ID"]
+
+logger = get_logger(__name__)
 
 
 def _try_request_token(client_id: str, client_secret: str, region: str) -> Tuple[bool, str]:
@@ -67,7 +70,7 @@ def check_credentials_validity() -> bool:
 
 def prompt_for_credentials_console() -> bool:
     """Prompt the user in the console for Blizzard credentials."""
-    print("⚠️  Credenciales de Blizzard no configuradas o inválidas.")
+    logger.warning("Credenciales de Blizzard no configuradas o inválidas.")
     client_id = input("BLIZZ_CLIENT_ID: ").strip()
     client_secret = input("BLIZZ_CLIENT_SECRET: ").strip()
     region = input("REGION (ej. eu): ").strip() or "eu"
@@ -75,7 +78,7 @@ def prompt_for_credentials_console() -> bool:
 
     ok, error = _try_request_token(client_id, client_secret, region)
     if not ok:
-        print(f"Error verificando credenciales: {error}")
+        logger.error("Error verificando credenciales: %s", error)
         return False
 
     save_env_file(
@@ -86,7 +89,7 @@ def prompt_for_credentials_console() -> bool:
             "REALM_ID": realm_id,
         }
     )
-    print("✅ Credenciales guardadas en .env")
+    logger.info("Credenciales guardadas en .env")
     load_dotenv(override=True)
     return True
 
@@ -126,13 +129,13 @@ def prompt_for_credentials_gui() -> bool:
                     "REALM_ID": realm_id,
                 }
             )
-            messagebox.showinfo("Kezan Protocol", "Credenciales guardadas correctamente")
+            logger.info("Credenciales guardadas correctamente")
             load_dotenv(override=True)
             return True
         if "Network error" in error:
-            messagebox.showerror("Kezan Protocol", error)
+            logger.error(error)
             return False
-        messagebox.showerror("Kezan Protocol", "Credenciales inválidas, intenta de nuevo")
+        logger.error("Credenciales inválidas, intenta de nuevo")
 
 
 def save_env_file(data: Dict[str, str]) -> None:

@@ -5,6 +5,8 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Callable, Dict, Iterable, List, Optional, Set
 
+from kezan import cache
+
 
 def build_analyzer(
     recipes: Iterable[Dict],
@@ -60,7 +62,7 @@ def build_analyzer(
         profit = sale_price - cost
         margin = profit / sale_price if sale_price else 0.0
 
-        return {
+        result = {
             "recipe_id": recipe_id,
             "product_id": recipe["product_id"],
             "cost": round(cost, 2),
@@ -70,6 +72,10 @@ def build_analyzer(
             "risk": len(missing),
             "missing_reagents": missing,
         }
+        processed = cache.get("processed_recipes") or set()
+        processed.add(recipe_id)
+        cache.set("processed_recipes", processed, ttl=3600)
+        return result
 
     return _analyze
 

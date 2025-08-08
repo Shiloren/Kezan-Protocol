@@ -5,12 +5,14 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
+import os
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 
 import requests
 
 from kezan.initializer import ensure_credentials
+from kezan.logger import get_logger
 
 try:
     _root = tk.Tk()
@@ -18,15 +20,20 @@ try:
     _root.update()
     _root.destroy()
 except tk.TclError:
-    print("❌ ERROR: No se detectó entorno gráfico. Ejecuta esta app en un PC con escritorio.")
+    logger = get_logger(__name__)
+    logger.error(
+        "No se detectó entorno gráfico. Ejecuta esta app en un PC con escritorio."
+    )
     sys.exit(1)
 
 # Ensure Blizzard API credentials are present before launching the app
 if not ensure_credentials(use_gui=True):
     sys.exit(1)
 
+logger = get_logger(__name__)
+
 API_URL = "http://localhost:8000/api/consejo"
-HISTORY_FILE = Path("history.json")
+HISTORY_FILE = Path(os.path.expanduser("~/.kezan/history.json"))
 
 
 class KezanApp(tk.Tk):
@@ -67,6 +74,9 @@ class KezanApp(tk.Tk):
         self.analysis_text = tk.Text(self, height=6)
         self.analysis_text.pack(fill="x", padx=5, pady=5)
 
+        self.status_var = tk.StringVar()
+        ttk.Label(self, textvariable=self.status_var).pack(fill="x", padx=5, pady=(0,5))
+
         ttk.Label(self, text="Historial:").pack(anchor="w", padx=5)
         self.history_list = tk.Listbox(self, height=5)
         self.history_list.pack(fill="both", expand=True, padx=5, pady=5)
@@ -80,7 +90,11 @@ class KezanApp(tk.Tk):
         return []
 
     def _save_history(self) -> None:
-        HISTORY_FILE.write_text(json.dumps(self.history, indent=2))
+        try:
+            HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+            HISTORY_FILE.write_text(json.dumps(self.history, indent=2))
+        except IOError as exc:
+            logger.error("No se pudo guardar historial: %s", exc)
 
     def fetch_data(self) -> None:
         params = {"limit": self.limit_var.get(), "min_margin": self.margin_var.get()}
@@ -89,7 +103,8 @@ class KezanApp(tk.Tk):
             resp.raise_for_status()
             data = resp.json()
         except Exception as exc:  # network or HTTP error
-            messagebox.showerror("Error", f"No se pudo obtener datos: {exc}")
+            logger.error("No se pudo obtener datos: %s", exc)
+            self.status_var.set(f"Error al obtener datos: {exc}")
             return
 
         self.tree.delete(*self.tree.get_children())
@@ -102,7 +117,8 @@ class KezanApp(tk.Tk):
             ))
 
         if "error" in data:
-            messagebox.showerror("Error", data["error"])
+            logger.error("Error de la API: %s", data["error"])
+            self.status_var.set(data["error"])
 
         recomendacion = data.get("recomendacion", "")
         self.analysis_text.delete("1.0", tk.END)
@@ -113,6 +129,7 @@ class KezanApp(tk.Tk):
             self.history.append(entry)
             self.history_list.insert(tk.END, f"{entry['timestamp']}: {recomendacion[:30]}...")
             self._save_history()
+            self.status_var.set("Datos actualizados correctamente")
 
 
 if __name__ == "__main__":
