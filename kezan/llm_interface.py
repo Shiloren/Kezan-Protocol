@@ -3,7 +3,7 @@ import os
 import time
 from typing import List, Dict, Optional
 
-import requests
+import httpx
 import logging
 
 # Configuration for the local LLM endpoint
@@ -47,7 +47,7 @@ def analyze_items_with_llm(data: List[Dict]) -> str:
 
     try:
         start = time.perf_counter()
-        response = requests.post(LLM_API_URL, json=payload, timeout=30)
+        response = httpx.post(LLM_API_URL, json=payload, timeout=30)
         elapsed = time.perf_counter() - start
         response.raise_for_status()
         content = response.json().get("response", "").strip()
@@ -55,7 +55,7 @@ def analyze_items_with_llm(data: List[Dict]) -> str:
             raise RuntimeError("Respuesta vacía del modelo de IA.")
         logging.getLogger(__name__).info("LLM analysis took %.2fs", elapsed)
         return content
-    except requests.RequestException as exc:
+    except httpx.HTTPError as exc:
         raise RuntimeError(
             "El modelo de IA local no está activo o no responde."
         ) from exc
@@ -98,7 +98,7 @@ def analyze_recipes_with_llm(data: List[Dict], inventory: Optional[List[int]] = 
 
     try:
         start = time.perf_counter()
-        response = requests.post(LLM_API_URL, json=payload, timeout=30)
+        response = httpx.post(LLM_API_URL, json=payload, timeout=30)
         elapsed = time.perf_counter() - start
         response.raise_for_status()
         content = response.json().get("response", "").strip()
@@ -106,7 +106,7 @@ def analyze_recipes_with_llm(data: List[Dict], inventory: Optional[List[int]] = 
             raise RuntimeError("Respuesta vacía del modelo de IA.")
         logging.getLogger(__name__).info("LLM recipe analysis took %.2fs", elapsed)
         return content
-    except requests.RequestException as exc:  # pragma: no cover - network errors
+    except httpx.HTTPError as exc:  # pragma: no cover - network errors
         raise RuntimeError(
             "El modelo de IA local no está activo o no responde."
         ) from exc

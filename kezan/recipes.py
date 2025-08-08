@@ -24,10 +24,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-try:  # pragma: no cover - requests might not be installed in tests
-    import requests
-except Exception:  # pragma: no cover
-    requests = None  # type: ignore
+import httpx
 
 from kezan.config import API_CLIENT_ID, API_CLIENT_SECRET, REGION
 
@@ -59,14 +56,12 @@ def load_recipes(profesion: str, json_file: str | None = None) -> List[Dict]:
         data = json.loads(Path(json_file).read_text())
         return data.get(profesion, [])
 
-    if requests is None:
-        raise RuntimeError("requests library is required for API access")
     if not API_CLIENT_ID or not API_CLIENT_SECRET:
         raise RuntimeError("Las claves de la API de Blizzard no están configuradas.")
 
     url = f"https://{REGION}.api.blizzard.com/data/wow/profession/{profesion}/recipes"
     try:
-        resp = requests.get(url, timeout=10)
+        resp = httpx.get(url, timeout=10)
         resp.raise_for_status()
         data = resp.json()
         return data.get("recipes", [])

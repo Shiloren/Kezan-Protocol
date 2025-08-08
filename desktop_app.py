@@ -9,7 +9,7 @@ import os
 import tkinter as tk
 from tkinter import ttk
 
-import requests
+import httpx
 
 from kezan.initializer import ensure_credentials
 from kezan.logger import get_logger
@@ -99,7 +99,7 @@ class KezanApp(tk.Tk):
     def fetch_data(self) -> None:
         params = {"limit": self.limit_var.get(), "min_margin": self.margin_var.get()}
         try:
-            resp = requests.get(API_URL, params=params, timeout=10)
+            resp = httpx.get(API_URL, params=params, timeout=10)
             resp.raise_for_status()
             data = resp.json()
         except Exception as exc:  # network or HTTP error
