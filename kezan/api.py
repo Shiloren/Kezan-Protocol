@@ -22,8 +22,10 @@ async def consejo(limit: int = 5, min_margin: float = 0.3):
     summary = await get_top_items(limit=limit, min_margin=min_margin)
     if isinstance(summary, dict) and summary.get("error"):
         return summary
+    items = summary.get("items", [])
     try:
-        recommendation = analyze_items_with_llm(summary.get("items", []))
+        recommendation = analyze_items_with_llm(items)
+        return {"recomendacion": recommendation, "items": items}
     except RuntimeError as exc:
-        return {"error": str(exc)}
-    return {"recomendacion": recommendation}
+        # Return the items even if the LLM is not available
+        return {"error": str(exc), "items": items}

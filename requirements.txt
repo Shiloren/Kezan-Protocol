@@ -1,0 +1,4 @@
+fastapi
+requests
+httpx
+python-dotenv
