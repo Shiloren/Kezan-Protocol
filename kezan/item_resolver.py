@@ -3,10 +3,7 @@ from __future__ import annotations
 
 from typing import Dict
 
-try:
-    import requests
-except Exception:  # pragma: no cover - requests may not be installed
-    requests = None  # type: ignore
+import httpx
 
 from kezan.config import API_CLIENT_ID, API_CLIENT_SECRET, REGION
 
@@ -23,11 +20,9 @@ def _get_access_token() -> str:
     global _token_cache
     if _token_cache:
         return _token_cache
-    if requests is None:
-        raise RuntimeError("requests library is required")
     if not API_CLIENT_ID or not API_CLIENT_SECRET:
         raise RuntimeError("Las claves de la API de Blizzard no están configuradas.")
-    resp = requests.post(
+    resp = httpx.post(
         _TOKEN_URL,
         data={"grant_type": "client_credentials"},
         auth=(API_CLIENT_ID, API_CLIENT_SECRET),
@@ -55,7 +50,7 @@ def resolve_item_name(item_id: int) -> str:
         headers = {"Authorization": f"Bearer {token}"}
         params = {"namespace": _NAMESPACE, "locale": "en_US"}
         url = _ITEM_URL.format(item_id=item_id)
-        resp = requests.get(url, headers=headers, params=params, timeout=10)  # type: ignore[arg-type]
+        resp = httpx.get(url, headers=headers, params=params, timeout=10)
         resp.raise_for_status()
         name = resp.json().get("name")
         if name:

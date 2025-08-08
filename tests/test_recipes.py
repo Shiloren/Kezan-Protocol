@@ -3,8 +3,6 @@ import os
 import sys
 from pathlib import Path
 
-import pytest
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import kezan.recipes as recipes_module

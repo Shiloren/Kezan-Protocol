@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Interactive initializer for Blizzard API credentials.
 
 This module provides helper functions to verify whether the Blizzard API
@@ -8,6 +6,8 @@ GUI dialogs or console input) to provide the necessary information and
 store it in a local ``.env`` file so that the rest of the application can
 load it using :mod:`python-dotenv`.
 """
+
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Dict, Tuple
