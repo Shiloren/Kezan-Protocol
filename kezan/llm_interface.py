@@ -3,16 +3,48 @@
 import json
 import os
 import time
+from pathlib import Path
 from typing import List, Dict, Optional
 
 import httpx
 import logging
+
+from kezan.config import LOCAL_MODELS_PATH, validate_local_model_path
 
 # Configuración para el endpoint local del LLM
 LLM_API_URL = os.getenv("LLM_API_URL", "http://localhost:11434/api/generate")
 LLM_MODEL = os.getenv("LLM_MODEL", "mistral")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.7"))
 LLM_TOP_P = float(os.getenv("LLM_TOP_P", "0.9"))
+
+
+def load_model_template(name: str) -> None:
+    """Load a local IA template and update runtime configuration."""
+
+    if not validate_local_model_path():
+        raise FileNotFoundError(
+            f"Directorio de modelos no encontrado: {LOCAL_MODELS_PATH}"
+        )
+
+    template_path = Path(LOCAL_MODELS_PATH) / f"{name}.json"
+    if not template_path.is_file():
+        raise FileNotFoundError(
+            f"No se encontró la plantilla de IA: {template_path}"
+        )
+
+    try:
+        data = json.loads(template_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:  # pragma: no cover - invalid template
+        raise ValueError("Plantilla de IA inválida") from exc
+
+    if "model" not in data:
+        raise ValueError("La plantilla debe contener la clave 'model'")
+
+    global LLM_MODEL, LLM_API_URL, LLM_TEMPERATURE, LLM_TOP_P
+    LLM_MODEL = data.get("model", LLM_MODEL)
+    LLM_API_URL = data.get("api_url", LLM_API_URL)
+    LLM_TEMPERATURE = float(data.get("temperature", LLM_TEMPERATURE))
+    LLM_TOP_P = float(data.get("top_p", LLM_TOP_P))
 
 
 def analyze_items_with_llm(data: List[Dict]) -> str:
