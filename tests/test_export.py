@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 
@@ -21,3 +22,21 @@ def test_export_csv(tmp_path):
     content = path.read_text().splitlines()
     assert content[0] == "a"
     assert content[1] == "1"
+
+
+def test_export_protects_overwrite(tmp_path):
+    data = [{"a": 1}]
+    path = tmp_path / "out.json"
+    export_data(data, path)
+    second = export_data(data, path)
+    assert path.exists() and second.exists()
+    assert path != second
+
+
+def test_export_overwrite(tmp_path):
+    path = tmp_path / "out.json"
+    export_data([{"a": 1}], path)
+    export_data([{"a": 2}], path, overwrite=True)
+    content = json.loads(path.read_text())[0]["a"]
+    assert content == 2
+
