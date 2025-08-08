@@ -1,4 +1,4 @@
-"""Prueba de recetas con materiales faltantes."""
+"""Pruebas de recetas con materiales faltantes y reactivos escasos."""
 
 from kezan.crafting_analyzer import analyze_recipes
 
