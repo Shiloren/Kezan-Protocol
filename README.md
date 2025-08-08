@@ -30,8 +30,8 @@ Crear un sistema local capaz de:
 
 ### 2. Fuente de datos
 
-- **Primario**: API oficial de Blizzard  
-  `https://{region}.api.blizzard.com/data/wow/connected-realm/{realmId}/auctions`  
+- **Primario**: API oficial de Blizzard
+  `https://{region}.api.blizzard.com/data/wow/connected-realm/{realmId}/auctions`
   Requiere OAuth2 + `namespace=dynamic-{region}`
 
 - **Alternativas**:
@@ -85,3 +85,47 @@ El backend estructura los datos en formato entendible para la IA:
     }
   ]
 }
+```
+
+---
+
+## 📦 Requisitos del sistema
+
+- CPU moderna con al menos 4 núcleos.
+- 8 GB de RAM (16 GB recomendados si ejecutas WoW y la IA al mismo tiempo).
+- Python 3.8–3.12 instalado (no se recomiendan versiones 3.13+).
+- Un modelo de lenguaje local (por ejemplo, `llama3`) servido desde Ollama o LM Studio.
+
+## 🚀 Instalación rápida (ejecutable)
+
+1. Descarga el ejecutable desde la sección de lanzamientos.
+2. Copia tu archivo `.env` en la misma carpeta que el ejecutable.
+3. Ejecuta `KezanAI` con doble clic o desde la terminal.
+
+> ℹ️ El archivo `.env` **no** se incrusta en el binario; debe estar siempre junto al ejecutable.
+
+## 💻 Uso
+
+1. Abre World of Warcraft.
+2. Inicia **KezanAI**.
+3. Pulsa **"Actualizar Datos"** para consultar la casa de subastas.
+4. Observa el análisis de la IA y las recomendaciones de compra o venta.
+
+## 🔧 Variables de entorno `.env`
+
+```ini
+BLIZZ_CLIENT_ID=
+BLIZZ_CLIENT_SECRET=
+REGION=eu
+REALM_ID=1080
+LM_ENDPOINT=http://localhost:11434
+LM_MODEL=llama3
+```
+
+## 🛠️ Solución de errores comunes
+
+- **"No se puede conectar al modelo IA"**: verifica que Ollama o LM Studio esté abierto y accesible en `LM_ENDPOINT`.
+- **"API keys no configuradas"**: asegúrate de definir `BLIZZ_CLIENT_ID` y `BLIZZ_CLIENT_SECRET` en tu archivo `.env`.
+- **El ejecutable se cierra al abrirse**: confirma que el archivo `.env` se encuentre junto al ejecutable y que ningún antivirus lo esté bloqueando.
+
+---
