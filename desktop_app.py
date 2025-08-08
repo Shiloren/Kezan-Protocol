@@ -2,12 +2,22 @@
 from __future__ import annotations
 
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, messagebox
 
 import requests
+
+try:
+    _root = tk.Tk()
+    _root.withdraw()
+    _root.update()
+    _root.destroy()
+except tk.TclError:
+    print("❌ ERROR: No se detectó entorno gráfico. Ejecuta esta app en un PC con escritorio.")
+    sys.exit(1)
 
 API_URL = "http://localhost:8000/api/consejo"
 HISTORY_FILE = Path("history.json")
