@@ -49,14 +49,14 @@
                     <h1 class="modulename">
 <a href="./../kezan.html">kezan</a><wbr>.item_resolver    </h1>
 
-                        <div class="docstring"><p>Resolve human-readable item names using the Blizzard API.</p>
+                        <div class="docstring"><p>Resuelve nombres legibles de items usando la API de Blizzard.</p>
 </div>
 
                         <input id="mod-item_resolver-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-item_resolver-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;Resolve human-readable item names using the Blizzard API.&quot;&quot;&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;Resuelve nombres legibles de items usando la API de Blizzard.&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
@@ -74,7 +74,7 @@
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_get_access_token</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve and cache an OAuth2 token for the Blizzard API.&quot;&quot;&quot;</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Obtiene y cachea un token OAuth2 para la API de Blizzard.&quot;&quot;&quot;</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">global</span> <span class="n">_token_cache</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">if</span> <span class="n">_token_cache</span><span class="p">:</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="n">_token_cache</span>
@@ -94,29 +94,28 @@
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="k">def</span><span class="w"> </span><span class="nf">resolve_item_name</span><span class="p">(</span><span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the human readable name for the given item id.</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Devuelve el nombre legible del item indicado.</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    If the request fails for any reason, a fallback string &quot;ItemID xxxx&quot; is</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    returned instead.</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">item_id</span><span class="p">:</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="s2">&quot;ItemID unknown&quot;</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">if</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">_name_cache</span><span class="p">:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="n">token</span> <span class="o">=</span> <span class="n">_get_access_token</span><span class="p">()</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="n">_NAMESPACE</span><span class="p">,</span> <span class="s2">&quot;locale&quot;</span><span class="p">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">}</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="n">url</span> <span class="o">=</span> <span class="n">_ITEM_URL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item_id</span><span class="o">=</span><span class="n">item_id</span><span class="p">)</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="n">name</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>            <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>            <span class="k">return</span> <span class="n">name</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">pass</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ItemID </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    Si la solicitud falla, se devuelve &quot;ItemID xxxx&quot; como alternativa.</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">item_id</span><span class="p">:</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="k">return</span> <span class="s2">&quot;ItemID unknown&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="k">if</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">_name_cache</span><span class="p">:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">token</span> <span class="o">=</span> <span class="n">_get_access_token</span><span class="p">()</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="n">_NAMESPACE</span><span class="p">,</span> <span class="s2">&quot;locale&quot;</span><span class="p">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">}</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="n">url</span> <span class="o">=</span> <span class="n">_ITEM_URL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item_id</span><span class="o">=</span><span class="n">item_id</span><span class="p">)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="n">name</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="n">name</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">pass</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ItemID </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
 </span></pre></div>
 
 
@@ -133,36 +132,34 @@
     </div>
     <a class="headerlink" href="#resolve_item_name"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="resolve_item_name-39"><a href="#resolve_item_name-39"><span class="linenos">39</span></a><span class="k">def</span><span class="w"> </span><span class="nf">resolve_item_name</span><span class="p">(</span><span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="resolve_item_name-40"><a href="#resolve_item_name-40"><span class="linenos">40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the human readable name for the given item id.</span>
+</span><span id="resolve_item_name-40"><a href="#resolve_item_name-40"><span class="linenos">40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Devuelve el nombre legible del item indicado.</span>
 </span><span id="resolve_item_name-41"><a href="#resolve_item_name-41"><span class="linenos">41</span></a>
-</span><span id="resolve_item_name-42"><a href="#resolve_item_name-42"><span class="linenos">42</span></a><span class="sd">    If the request fails for any reason, a fallback string &quot;ItemID xxxx&quot; is</span>
-</span><span id="resolve_item_name-43"><a href="#resolve_item_name-43"><span class="linenos">43</span></a><span class="sd">    returned instead.</span>
-</span><span id="resolve_item_name-44"><a href="#resolve_item_name-44"><span class="linenos">44</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="resolve_item_name-45"><a href="#resolve_item_name-45"><span class="linenos">45</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">item_id</span><span class="p">:</span>
-</span><span id="resolve_item_name-46"><a href="#resolve_item_name-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="s2">&quot;ItemID unknown&quot;</span>
-</span><span id="resolve_item_name-47"><a href="#resolve_item_name-47"><span class="linenos">47</span></a>    <span class="k">if</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">_name_cache</span><span class="p">:</span>
-</span><span id="resolve_item_name-48"><a href="#resolve_item_name-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
-</span><span id="resolve_item_name-49"><a href="#resolve_item_name-49"><span class="linenos">49</span></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="resolve_item_name-50"><a href="#resolve_item_name-50"><span class="linenos">50</span></a>        <span class="n">token</span> <span class="o">=</span> <span class="n">_get_access_token</span><span class="p">()</span>
-</span><span id="resolve_item_name-51"><a href="#resolve_item_name-51"><span class="linenos">51</span></a>        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
-</span><span id="resolve_item_name-52"><a href="#resolve_item_name-52"><span class="linenos">52</span></a>        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="n">_NAMESPACE</span><span class="p">,</span> <span class="s2">&quot;locale&quot;</span><span class="p">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">}</span>
-</span><span id="resolve_item_name-53"><a href="#resolve_item_name-53"><span class="linenos">53</span></a>        <span class="n">url</span> <span class="o">=</span> <span class="n">_ITEM_URL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item_id</span><span class="o">=</span><span class="n">item_id</span><span class="p">)</span>
-</span><span id="resolve_item_name-54"><a href="#resolve_item_name-54"><span class="linenos">54</span></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="resolve_item_name-55"><a href="#resolve_item_name-55"><span class="linenos">55</span></a>        <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-</span><span id="resolve_item_name-56"><a href="#resolve_item_name-56"><span class="linenos">56</span></a>        <span class="n">name</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-</span><span id="resolve_item_name-57"><a href="#resolve_item_name-57"><span class="linenos">57</span></a>        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
-</span><span id="resolve_item_name-58"><a href="#resolve_item_name-58"><span class="linenos">58</span></a>            <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-</span><span id="resolve_item_name-59"><a href="#resolve_item_name-59"><span class="linenos">59</span></a>            <span class="k">return</span> <span class="n">name</span>
-</span><span id="resolve_item_name-60"><a href="#resolve_item_name-60"><span class="linenos">60</span></a>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-</span><span id="resolve_item_name-61"><a href="#resolve_item_name-61"><span class="linenos">61</span></a>        <span class="k">pass</span>
-</span><span id="resolve_item_name-62"><a href="#resolve_item_name-62"><span class="linenos">62</span></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ItemID </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="resolve_item_name-42"><a href="#resolve_item_name-42"><span class="linenos">42</span></a><span class="sd">    Si la solicitud falla, se devuelve &quot;ItemID xxxx&quot; como alternativa.</span>
+</span><span id="resolve_item_name-43"><a href="#resolve_item_name-43"><span class="linenos">43</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="resolve_item_name-44"><a href="#resolve_item_name-44"><span class="linenos">44</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">item_id</span><span class="p">:</span>
+</span><span id="resolve_item_name-45"><a href="#resolve_item_name-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="s2">&quot;ItemID unknown&quot;</span>
+</span><span id="resolve_item_name-46"><a href="#resolve_item_name-46"><span class="linenos">46</span></a>    <span class="k">if</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">_name_cache</span><span class="p">:</span>
+</span><span id="resolve_item_name-47"><a href="#resolve_item_name-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
+</span><span id="resolve_item_name-48"><a href="#resolve_item_name-48"><span class="linenos">48</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="resolve_item_name-49"><a href="#resolve_item_name-49"><span class="linenos">49</span></a>        <span class="n">token</span> <span class="o">=</span> <span class="n">_get_access_token</span><span class="p">()</span>
+</span><span id="resolve_item_name-50"><a href="#resolve_item_name-50"><span class="linenos">50</span></a>        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span id="resolve_item_name-51"><a href="#resolve_item_name-51"><span class="linenos">51</span></a>        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="n">_NAMESPACE</span><span class="p">,</span> <span class="s2">&quot;locale&quot;</span><span class="p">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">}</span>
+</span><span id="resolve_item_name-52"><a href="#resolve_item_name-52"><span class="linenos">52</span></a>        <span class="n">url</span> <span class="o">=</span> <span class="n">_ITEM_URL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item_id</span><span class="o">=</span><span class="n">item_id</span><span class="p">)</span>
+</span><span id="resolve_item_name-53"><a href="#resolve_item_name-53"><span class="linenos">53</span></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="resolve_item_name-54"><a href="#resolve_item_name-54"><span class="linenos">54</span></a>        <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span id="resolve_item_name-55"><a href="#resolve_item_name-55"><span class="linenos">55</span></a>        <span class="n">name</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+</span><span id="resolve_item_name-56"><a href="#resolve_item_name-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+</span><span id="resolve_item_name-57"><a href="#resolve_item_name-57"><span class="linenos">57</span></a>            <span class="n">_name_cache</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+</span><span id="resolve_item_name-58"><a href="#resolve_item_name-58"><span class="linenos">58</span></a>            <span class="k">return</span> <span class="n">name</span>
+</span><span id="resolve_item_name-59"><a href="#resolve_item_name-59"><span class="linenos">59</span></a>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span><span id="resolve_item_name-60"><a href="#resolve_item_name-60"><span class="linenos">60</span></a>        <span class="k">pass</span>
+</span><span id="resolve_item_name-61"><a href="#resolve_item_name-61"><span class="linenos">61</span></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ItemID </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Return the human readable name for the given item id.</p>
+            <div class="docstring"><p>Devuelve el nombre legible del item indicado.</p>
 
-<p>If the request fails for any reason, a fallback string "ItemID xxxx" is
-returned instead.</p>
+<p>Si la solicitud falla, se devuelve "ItemID xxxx" como alternativa.</p>
 </div>
 
 

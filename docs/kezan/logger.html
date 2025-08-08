@@ -55,24 +55,24 @@
                     <h1 class="modulename">
 <a href="./../kezan.html">kezan</a><wbr>.logger    </h1>
 
-                        <div class="docstring"><p>Logging utilities used across the Kezan Protocol package.</p>
+                        <div class="docstring"><p>Utilidades de logging usadas en todo Kezan Protocol.</p>
 
-<p>The module exposes a single helper <code><a href="#get_logger">get_logger()</a></code> which returns a
-configured <code>logging.Logger</code> instance writing to both a rotating file
-and the console.  The configuration is idempotent, meaning repeated calls
-with the same <code>name</code> reuse existing handlers.</p>
+<p>El módulo expone un único helper <code><a href="#get_logger">get_logger()</a></code> que devuelve un
+<code>logging.Logger</code> configurado para escribir tanto en archivo rotativo como en
+consola. La configuración es idempotente: llamadas repetidas reutilizan los
+handlers existentes.</p>
 </div>
 
                         <input id="mod-logger-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-logger-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;Logging utilities used across the Kezan Protocol package.</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;Utilidades de logging usadas en todo Kezan Protocol.</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">The module exposes a single helper :func:`get_logger` which returns a</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">configured :class:`logging.Logger` instance writing to both a rotating file</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">and the console.  The configuration is idempotent, meaning repeated calls</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">with the same ``name`` reuse existing handlers.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">El módulo expone un único helper :func:`get_logger` que devuelve un</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">``logging.Logger`` configurado para escribir tanto en archivo rotativo como en</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">consola. La configuración es idempotente: llamadas repetidas reutilizan los</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">handlers existentes.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -85,37 +85,35 @@ with the same <code>name</code> reuse existing handlers.</p>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_logger</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;kezan&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a configured :class:`logging.Logger`.</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Devuelve un :class:`logging.Logger` configurado.</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    Args:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        name: Name of the logger to retrieve or create.</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    Parámetros:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    - name (str): nombre del logger a obtener o crear.</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    Returns:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">        logging.Logger: Logger with file and stream handlers attached.</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    Retorna:</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    - logging.Logger: logger con manejadores de archivo y consola.</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    Notes:</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        Subsequent calls with the same ``name`` will reuse the same logger</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        instance and not add duplicate handlers.</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">logger</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">LOG_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="p">)</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">LOG_FILE</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="k">return</span> <span class="n">logger</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    Notas:</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    - Llamadas posteriores con el mismo nombre reutilizan la instancia.</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="k">return</span> <span class="n">logger</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">LOG_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="p">)</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">LOG_FILE</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">return</span> <span class="n">logger</span>
 </span></pre></div>
 
 
@@ -156,51 +154,57 @@ with the same <code>name</code> reuse existing handlers.</p>
     </div>
     <a class="headerlink" href="#get_logger"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="get_logger-19"><a href="#get_logger-19"><span class="linenos">19</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_logger</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;kezan&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
-</span><span id="get_logger-20"><a href="#get_logger-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a configured :class:`logging.Logger`.</span>
+</span><span id="get_logger-20"><a href="#get_logger-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Devuelve un :class:`logging.Logger` configurado.</span>
 </span><span id="get_logger-21"><a href="#get_logger-21"><span class="linenos">21</span></a>
-</span><span id="get_logger-22"><a href="#get_logger-22"><span class="linenos">22</span></a><span class="sd">    Args:</span>
-</span><span id="get_logger-23"><a href="#get_logger-23"><span class="linenos">23</span></a><span class="sd">        name: Name of the logger to retrieve or create.</span>
+</span><span id="get_logger-22"><a href="#get_logger-22"><span class="linenos">22</span></a><span class="sd">    Parámetros:</span>
+</span><span id="get_logger-23"><a href="#get_logger-23"><span class="linenos">23</span></a><span class="sd">    - name (str): nombre del logger a obtener o crear.</span>
 </span><span id="get_logger-24"><a href="#get_logger-24"><span class="linenos">24</span></a>
-</span><span id="get_logger-25"><a href="#get_logger-25"><span class="linenos">25</span></a><span class="sd">    Returns:</span>
-</span><span id="get_logger-26"><a href="#get_logger-26"><span class="linenos">26</span></a><span class="sd">        logging.Logger: Logger with file and stream handlers attached.</span>
+</span><span id="get_logger-25"><a href="#get_logger-25"><span class="linenos">25</span></a><span class="sd">    Retorna:</span>
+</span><span id="get_logger-26"><a href="#get_logger-26"><span class="linenos">26</span></a><span class="sd">    - logging.Logger: logger con manejadores de archivo y consola.</span>
 </span><span id="get_logger-27"><a href="#get_logger-27"><span class="linenos">27</span></a>
-</span><span id="get_logger-28"><a href="#get_logger-28"><span class="linenos">28</span></a><span class="sd">    Notes:</span>
-</span><span id="get_logger-29"><a href="#get_logger-29"><span class="linenos">29</span></a><span class="sd">        Subsequent calls with the same ``name`` will reuse the same logger</span>
-</span><span id="get_logger-30"><a href="#get_logger-30"><span class="linenos">30</span></a><span class="sd">        instance and not add duplicate handlers.</span>
-</span><span id="get_logger-31"><a href="#get_logger-31"><span class="linenos">31</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_logger-32"><a href="#get_logger-32"><span class="linenos">32</span></a>
-</span><span id="get_logger-33"><a href="#get_logger-33"><span class="linenos">33</span></a>    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</span><span id="get_logger-34"><a href="#get_logger-34"><span class="linenos">34</span></a>    <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
-</span><span id="get_logger-35"><a href="#get_logger-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="n">logger</span>
-</span><span id="get_logger-36"><a href="#get_logger-36"><span class="linenos">36</span></a>
-</span><span id="get_logger-37"><a href="#get_logger-37"><span class="linenos">37</span></a>    <span class="n">LOG_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="get_logger-38"><a href="#get_logger-38"><span class="linenos">38</span></a>    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
-</span><span id="get_logger-39"><a href="#get_logger-39"><span class="linenos">39</span></a>        <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-</span><span id="get_logger-40"><a href="#get_logger-40"><span class="linenos">40</span></a>    <span class="p">)</span>
-</span><span id="get_logger-41"><a href="#get_logger-41"><span class="linenos">41</span></a>
-</span><span id="get_logger-42"><a href="#get_logger-42"><span class="linenos">42</span></a>    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">LOG_FILE</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-</span><span id="get_logger-43"><a href="#get_logger-43"><span class="linenos">43</span></a>    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-</span><span id="get_logger-44"><a href="#get_logger-44"><span class="linenos">44</span></a>    <span class="n">stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
-</span><span id="get_logger-45"><a href="#get_logger-45"><span class="linenos">45</span></a>    <span class="n">stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-</span><span id="get_logger-46"><a href="#get_logger-46"><span class="linenos">46</span></a>
-</span><span id="get_logger-47"><a href="#get_logger-47"><span class="linenos">47</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-</span><span id="get_logger-48"><a href="#get_logger-48"><span class="linenos">48</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
-</span><span id="get_logger-49"><a href="#get_logger-49"><span class="linenos">49</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
-</span><span id="get_logger-50"><a href="#get_logger-50"><span class="linenos">50</span></a>    <span class="k">return</span> <span class="n">logger</span>
+</span><span id="get_logger-28"><a href="#get_logger-28"><span class="linenos">28</span></a><span class="sd">    Notas:</span>
+</span><span id="get_logger-29"><a href="#get_logger-29"><span class="linenos">29</span></a><span class="sd">    - Llamadas posteriores con el mismo nombre reutilizan la instancia.</span>
+</span><span id="get_logger-30"><a href="#get_logger-30"><span class="linenos">30</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_logger-31"><a href="#get_logger-31"><span class="linenos">31</span></a>    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span id="get_logger-32"><a href="#get_logger-32"><span class="linenos">32</span></a>    <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
+</span><span id="get_logger-33"><a href="#get_logger-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="n">logger</span>
+</span><span id="get_logger-34"><a href="#get_logger-34"><span class="linenos">34</span></a>
+</span><span id="get_logger-35"><a href="#get_logger-35"><span class="linenos">35</span></a>    <span class="n">LOG_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="get_logger-36"><a href="#get_logger-36"><span class="linenos">36</span></a>    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+</span><span id="get_logger-37"><a href="#get_logger-37"><span class="linenos">37</span></a>        <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+</span><span id="get_logger-38"><a href="#get_logger-38"><span class="linenos">38</span></a>    <span class="p">)</span>
+</span><span id="get_logger-39"><a href="#get_logger-39"><span class="linenos">39</span></a>
+</span><span id="get_logger-40"><a href="#get_logger-40"><span class="linenos">40</span></a>    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">LOG_FILE</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="get_logger-41"><a href="#get_logger-41"><span class="linenos">41</span></a>    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+</span><span id="get_logger-42"><a href="#get_logger-42"><span class="linenos">42</span></a>    <span class="n">stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+</span><span id="get_logger-43"><a href="#get_logger-43"><span class="linenos">43</span></a>    <span class="n">stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+</span><span id="get_logger-44"><a href="#get_logger-44"><span class="linenos">44</span></a>
+</span><span id="get_logger-45"><a href="#get_logger-45"><span class="linenos">45</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</span><span id="get_logger-46"><a href="#get_logger-46"><span class="linenos">46</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+</span><span id="get_logger-47"><a href="#get_logger-47"><span class="linenos">47</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
+</span><span id="get_logger-48"><a href="#get_logger-48"><span class="linenos">48</span></a>    <span class="k">return</span> <span class="n">logger</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Return a configured <code>logging.Logger</code>.</p>
+            <div class="docstring"><p>Devuelve un <code>logging.Logger</code> configurado.</p>
 
-<p>Args:
-    name: Name of the logger to retrieve or create.</p>
+<p>Parámetros:</p>
 
-<p>Returns:
-    logging.Logger: Logger with file and stream handlers attached.</p>
+<ul>
+<li>name (str): nombre del logger a obtener o crear.</li>
+</ul>
 
-<p>Notes:
-    Subsequent calls with the same <code>name</code> will reuse the same logger
-    instance and not add duplicate handlers.</p>
+<p>Retorna:</p>
+
+<ul>
+<li>logging.Logger: logger con manejadores de archivo y consola.</li>
+</ul>
+
+<p>Notas:</p>
+
+<ul>
+<li>Llamadas posteriores con el mismo nombre reutilizan la instancia.</li>
+</ul>
 </div>
 
 

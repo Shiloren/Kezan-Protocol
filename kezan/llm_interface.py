@@ -20,7 +20,6 @@ LLM_TOP_P = float(os.getenv("LLM_TOP_P", "0.9"))
 
 def load_model_template(name: str) -> None:
     """Load a local IA template and update runtime configuration."""
-
     if not validate_local_model_path():
         raise FileNotFoundError(
             f"Directorio de modelos no encontrado: {LOCAL_MODELS_PATH}"
@@ -28,9 +27,7 @@ def load_model_template(name: str) -> None:
 
     template_path = Path(LOCAL_MODELS_PATH) / f"{name}.json"
     if not template_path.is_file():
-        raise FileNotFoundError(
-            f"No se encontró la plantilla de IA: {template_path}"
-        )
+        raise FileNotFoundError(f"No se encontró la plantilla de IA: {template_path}")
 
     try:
         data = json.loads(template_path.read_text(encoding="utf-8"))
@@ -89,7 +86,9 @@ def analyze_items_with_llm(data: List[Dict]) -> str:
         ) from exc
 
 
-def analyze_recipes_with_llm(data: List[Dict], inventory: Optional[List[int]] = None) -> str:
+def analyze_recipes_with_llm(
+    data: List[Dict], inventory: Optional[List[int]] = None
+) -> str:
     """Evalúa recetas de crafteo usando el LLM local.
 
     Parámetros:
@@ -129,4 +128,3 @@ def analyze_recipes_with_llm(data: List[Dict], inventory: Optional[List[int]] = 
         raise RuntimeError(
             "El modelo de IA local no está activo o no responde."
         ) from exc
-
