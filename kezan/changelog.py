@@ -1,4 +1,4 @@
-"""Simple CHANGELOG.md management utilities."""
+"""Utilidades sencillas para gestionar ``CHANGELOG.md``."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -6,9 +6,9 @@ from pathlib import Path
 
 
 def log_change(summary: str, version: str) -> None:
-    """Append a change entry to ``CHANGELOG.md``.
+    """Agrega una entrada al ``CHANGELOG.md``.
 
-    Each entry is stored in the format::
+    Cada entrada se almacena con el formato::
 
         ## <version> - <timestamp>
         <summary>

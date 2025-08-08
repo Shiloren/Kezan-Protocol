@@ -1,3 +1,5 @@
+"""Funciones para interactuar con la API de Blizzard."""
+
 import httpx
 
 from kezan.config import API_CLIENT_ID, API_CLIENT_SECRET, REGION, REALM_ID
@@ -13,8 +15,12 @@ NAMESPACE = f"dynamic-{REGION}"
 logger = get_logger(__name__)
 
 
-async def get_access_token():
-    """Solicita un token OAuth2 de Blizzard (a implementar cuando se configuren las claves)."""
+async def get_access_token() -> str | None:
+    """Obtiene y almacena temporalmente un token OAuth2.
+
+    Retorna:
+    - str | None: token de acceso válido o ``None`` si la solicitud falla.
+    """
     if not API_CLIENT_ID or not API_CLIENT_SECRET:
         raise RuntimeError("Las claves de la API de Blizzard no están configuradas.")
 
@@ -43,8 +49,12 @@ async def get_access_token():
     return token
 
 
-async def fetch_auction_data():
-    """Obtiene los datos de subasta del reino (a implementar)."""
+async def fetch_auction_data() -> dict | None:
+    """Descarga los datos de subastas del reino configurado.
+
+    Retorna:
+    - dict | None: datos de la API o ``None`` si hubo error.
+    """
     cached = cache.get("auction_data")
     if cached:
         return cached

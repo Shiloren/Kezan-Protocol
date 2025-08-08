@@ -1,4 +1,4 @@
-"""Utilities for exporting analysis results with overwrite protection."""
+"""Utilidades para exportar resultados de análisis con protección de sobrescritura."""
 from __future__ import annotations
 
 import csv
@@ -15,30 +15,20 @@ logger = get_logger(__name__)
 def export_data(
     items: Iterable[Dict[str, Any]], filename: str, overwrite: bool = False
 ) -> Path:
-    """Export ``items`` to ``filename``.
+    """Exporta ``items`` a ``filename``.
 
-    Parameters
-    ----------
-    items:
-        Iterable with the data to export.
-    filename:
-        Target filename.  If a file with the same name already exists a
-        timestamp will be appended to avoid overwriting unless ``overwrite`` is
-        ``True``.
-    overwrite:
-        When ``True`` existing files are replaced.
+    Parámetros:
+    - items (Iterable[Dict[str, Any]]): datos a exportar.
+    - filename (str): nombre de archivo destino. Si existe y ``overwrite`` es
+      ``False``, se añade marca de tiempo para evitar sobrescribir.
+    - overwrite (bool): si es ``True``, se reemplaza el archivo existente.
 
-    Returns
-    -------
-    Path
-        Path to the file written to disk.
+    Retorna:
+    - Path: ruta del archivo generado.
 
-    Raises
-    ------
-    ValueError
-        If the file extension is not ``.json`` or ``.csv``.
+    Lanza:
+    - ValueError: si la extensión no es ``.json`` ni ``.csv``.
     """
-
     path = Path(filename)
     if path.exists() and not overwrite:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")

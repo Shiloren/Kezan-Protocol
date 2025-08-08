@@ -1,10 +1,8 @@
-"""Interactive initializer for Blizzard API credentials.
+"""Inicializador interactivo para credenciales de la API de Blizzard.
 
-This module provides helper functions to verify whether the Blizzard API
-credentials are present and valid.  If not, it can prompt the user (via
-GUI dialogs or console input) to provide the necessary information and
-store it in a local ``.env`` file so that the rest of the application can
-load it using :mod:`python-dotenv`.
+Este módulo valida la presencia de credenciales y, si faltan, solicita al
+usuario (por GUI o consola) que las ingrese y las guarda en ``.env`` para el
+resto de la aplicación.
 """
 
 from __future__ import annotations
@@ -32,12 +30,12 @@ logger = get_logger(__name__)
 
 
 def _try_request_token(client_id: str, client_secret: str, region: str) -> Tuple[bool, str]:
-    """Attempt to obtain an OAuth token to validate credentials.
+    """Intenta obtener un token OAuth para validar credenciales.
 
-    Returns a tuple ``(ok, error)`` where ``ok`` indicates success.
-    ``error`` contains an error message when ``ok`` is ``False``.
+    Retorna:
+    - Tuple[bool, str]: ``(ok, error)`` donde ``ok`` indica éxito y ``error`` el
+      mensaje asociado cuando falla.
     """
-
     token_url = f"https://{region}.battle.net/oauth/token"
     try:
         response = httpx.post(
@@ -55,7 +53,7 @@ def _try_request_token(client_id: str, client_secret: str, region: str) -> Tuple
 
 
 def check_credentials_validity() -> bool:
-    """Check whether the current environment variables yield a valid token."""
+    """Verifica si las variables de entorno actuales producen un token válido."""
     load_dotenv(override=True)
     client_id = os.getenv("BLIZZ_CLIENT_ID", "")
     client_secret = os.getenv("BLIZZ_CLIENT_SECRET", "")
@@ -69,7 +67,7 @@ def check_credentials_validity() -> bool:
 
 
 def prompt_for_credentials_console() -> bool:
-    """Prompt the user in the console for Blizzard credentials."""
+    """Solicita las credenciales de Blizzard por consola."""
     logger.warning("Credenciales de Blizzard no configuradas o inválidas.")
     client_id = input("BLIZZ_CLIENT_ID: ").strip()
     client_secret = input("BLIZZ_CLIENT_SECRET: ").strip()
@@ -95,7 +93,7 @@ def prompt_for_credentials_console() -> bool:
 
 
 def prompt_for_credentials_gui() -> bool:
-    """Prompt the user via Tkinter dialogs for Blizzard credentials."""
+    """Solicita las credenciales de Blizzard mediante diálogos Tkinter."""
     if tk is None or simpledialog is None:
         return prompt_for_credentials_console()
 
@@ -139,19 +137,18 @@ def prompt_for_credentials_gui() -> bool:
 
 
 def save_env_file(data: Dict[str, str]) -> None:
-    """Write the provided credentials to the .env file."""
+    """Escribe las credenciales proporcionadas en el archivo ``.env``."""
     lines = [f"{key}={value}\n" for key, value in data.items()]
     ENV_PATH.write_text("".join(lines))
 
 
 def ensure_credentials(use_gui: bool = False) -> bool:
-    """Ensure valid Blizzard credentials are available.
+    """Garantiza que existen credenciales válidas.
 
-    Returns ``True`` if credentials are valid or have been obtained
-    successfully.  Returns ``False`` if the user cancels the process or a
-    connection error occurs.
+    Retorna ``True`` si las credenciales son válidas o se obtuvieron
+    satisfactoriamente. Retorna ``False`` si el usuario cancela o hay error
+    de conexión.
     """
-
     if check_credentials_validity():
         return True
 
