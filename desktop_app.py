@@ -10,6 +10,8 @@ from tkinter import ttk, messagebox
 
 import requests
 
+from kezan.initializer import ensure_credentials
+
 try:
     _root = tk.Tk()
     _root.withdraw()
@@ -17,6 +19,10 @@ try:
     _root.destroy()
 except tk.TclError:
     print("❌ ERROR: No se detectó entorno gráfico. Ejecuta esta app en un PC con escritorio.")
+    sys.exit(1)
+
+# Ensure Blizzard API credentials are present before launching the app
+if not ensure_credentials(use_gui=True):
     sys.exit(1)
 
 API_URL = "http://localhost:8000/api/consejo"
