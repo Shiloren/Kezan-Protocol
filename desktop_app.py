@@ -11,7 +11,7 @@ from tkinter import ttk
 
 import httpx
 
-from kezan.initializer import ensure_credentials
+from kezan.initializer import check_credentials_validity
 from kezan.logger import get_logger
 
 try:
@@ -26,10 +26,6 @@ except tk.TclError:
     )
     sys.exit(1)
 
-# Ensure Blizzard API credentials are present before launching the app
-if not ensure_credentials(use_gui=True):
-    sys.exit(1)
-
 logger = get_logger(__name__)
 
 API_URL = "http://localhost:8000/api/consejo"
@@ -42,6 +38,11 @@ class KezanApp(tk.Tk):
         self.title("Kezan Protocol")
         self.geometry("700x500")
 
+        self.offline_mode = not check_credentials_validity()
+        if self.offline_mode:
+            self._show_offline_warning()
+
+        self._build_menu()
         self._build_widgets()
         self.history = self._load_history()
         for entry in self.history:
@@ -59,7 +60,12 @@ class KezanApp(tk.Tk):
         self.margin_var = tk.StringVar(value="0.3")
         ttk.Entry(filters, textvariable=self.margin_var, width=5).pack(side="left", padx=(0, 5))
 
-        ttk.Button(filters, text="Actualizar Datos", command=self.fetch_data).pack(side="left")
+        self.fetch_button = ttk.Button(
+            filters, text="Actualizar Datos", command=self.fetch_data
+        )
+        if self.offline_mode:
+            self.fetch_button.config(state=tk.DISABLED)
+        self.fetch_button.pack(side="left")
 
         # Items table
         columns = ("name", "ah_price", "avg_sell_price", "margin")
@@ -81,6 +87,49 @@ class KezanApp(tk.Tk):
         self.history_list = tk.Listbox(self, height=5)
         self.history_list.pack(fill="both", expand=True, padx=5, pady=5)
 
+    def _build_menu(self) -> None:
+        menubar = tk.Menu(self)
+
+        file_menu = tk.Menu(menubar, tearoff=False)
+        file_menu.add_command(label="Salir", command=self.destroy)
+        menubar.add_cascade(label="Archivo", menu=file_menu)
+
+        config_menu = tk.Menu(menubar, tearoff=False)
+        config_menu.add_command(label="Preferencias", command=self._open_config)
+        menubar.add_cascade(label="Configuración", menu=config_menu)
+
+        templates_menu = tk.Menu(menubar, tearoff=False)
+        templates_menu.add_command(
+            label="LLaMA 8B",
+            command=lambda: self._load_template("llama-8b"),
+        )
+        menubar.add_cascade(label="Plantillas IA", menu=templates_menu)
+
+        self.config(menu=menubar)
+
+    def _show_offline_warning(self) -> None:
+        self.config(highlightbackground="red", highlightthickness=2)
+        ttk.Label(
+            self,
+            text=(
+                "⚠️ No se detectaron credenciales de Blizzard API. "
+                "Algunas funciones estarán desactivadas."
+            ),
+            foreground="red",
+        ).pack(fill="x", padx=5, pady=5)
+
+    def _open_config(self) -> None:  # pragma: no cover - GUI only
+        self.status_var.set("Configuración no implementada")
+
+    def _load_template(self, name: str) -> None:  # pragma: no cover - GUI only
+        try:
+            from kezan import llm_interface
+
+            llm_interface.load_model_template(name)
+            self.status_var.set(f"Plantilla {name} cargada")
+        except Exception as exc:
+            self.status_var.set(f"Error cargando plantilla: {exc}")
+
     def _load_history(self):
         if HISTORY_FILE.exists():
             try:
@@ -97,6 +146,10 @@ class KezanApp(tk.Tk):
             logger.error("No se pudo guardar historial: %s", exc)
 
     def fetch_data(self) -> None:
+        if self.offline_mode:
+            self.status_var.set("Funciones online desactivadas")
+            return
+
         params = {"limit": self.limit_var.get(), "min_margin": self.margin_var.get()}
         try:
             resp = httpx.get(API_URL, params=params, timeout=10)
