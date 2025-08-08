@@ -1,4 +1,5 @@
 from kezan.blizzard_api import fetch_auction_data
+from kezan.formatter import format_for_ai
 
 async def get_top_items(limit=5, min_margin=0.3):
     """
@@ -33,4 +34,4 @@ async def get_top_items(limit=5, min_margin=0.3):
                 "margin": round(margin, 2),
             })
 
-    return items[:limit]
+    return format_for_ai(items[:limit])
