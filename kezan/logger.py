@@ -1,3 +1,11 @@
+"""Logging utilities used across the Kezan Protocol package.
+
+The module exposes a single helper :func:`get_logger` which returns a
+configured :class:`logging.Logger` instance writing to both a rotating file
+and the console.  The configuration is idempotent, meaning repeated calls
+with the same ``name`` reuse existing handlers.
+"""
+
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
@@ -8,10 +16,17 @@ LOG_FILE = LOG_DIR / "kezan.log"
 
 
 def get_logger(name: str = "kezan") -> logging.Logger:
-    """Return a configured logger instance.
+    """Return a configured :class:`logging.Logger`.
 
-    The logger writes to both a rotating file handler and the console. The
-    configuration is applied only once per logger name.
+    Args:
+        name: Name of the logger to retrieve or create.
+
+    Returns:
+        logging.Logger: Logger with file and stream handlers attached.
+
+    Notes:
+        Subsequent calls with the same ``name`` will reuse the same logger
+        instance and not add duplicate handlers.
     """
 
     logger = logging.getLogger(name)
