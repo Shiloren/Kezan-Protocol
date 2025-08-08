@@ -15,3 +15,15 @@ KezanAI.spec
 
 # Test artifacts
 .pytest_cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/src-tauri/target/
+frontend/src-tauri/icons/
+frontend/favicon.ico
+frontend/icons/
+
+# Binary artifacts
+Agent.md
+*.rar

@@ -22,7 +22,7 @@ Kezan Protocol es un asistente local que analiza la casa de subastas de World of
 2. **Análisis de mercado** – `analyzer` filtra los lotes más rentables y los formatea con `formatter`.
 3. **Análisis de crafteo** – `crafting_analyzer` evalúa recetas usando precios de mercado.
 4. **IA local** – `llm_interface` envía los datos a un modelo local (Ollama, LM Studio, etc.) para producir recomendaciones en español.
-5. **API y UI** – `api` expone endpoints REST, `main` monta la app de FastAPI y `desktop_app` consulta dichos endpoints ofreciendo una interfaz gráfica.
+5. **API y UI** – `api` expone endpoints REST, `main` monta la app de FastAPI y la interfaz en `frontend/` (Tauri + React) consulta dichos endpoints ofreciendo una experiencia de escritorio.
 6. **Persistencia y utilidades** – `cache` almacena tokens y resultados, `context_memory` guarda históricos, `export` permite volcar datos a CSV/JSON y `logger` mantiene registros rotativos.
 
 ## Requisitos
@@ -68,10 +68,13 @@ Endpoints disponibles:
 
 ### Interfaz de escritorio
 
-La GUI de Tkinter consume la ruta `/api/consejo`:
+La interfaz moderna se construye con **Tauri + React** y consume las rutas API:
 
 ```bash
-python desktop_app.py
+cd frontend
+npm install
+npm run dev    # durante el desarrollo
+npm run build  # generar ejecutable
 ```
 
 ## Flujo de datos paso a paso
