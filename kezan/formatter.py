@@ -1,11 +1,13 @@
+"""Helpers for preparing item data for language model consumption."""
+
 from kezan.item_resolver import resolve_item_name
 
 
 def format_for_ai(items: list) -> dict:
     """Prepare item data for LLM consumption.
 
-    Ensures each item has a human readable name, falling back to a resolver
-    that queries the Blizzard API when necessary.
+    Ensures each item has a human readable name, falling back to a resolver that
+    queries the Blizzard API when necessary.
     """
     return {
         "items": [
