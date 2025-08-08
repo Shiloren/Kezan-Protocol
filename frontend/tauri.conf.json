@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "package": {
+    "productName": "Kezan Protocol",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "identifier": "com.kezan.protocol",
+      "targets": "all"
+    },
+    "windows": [
+      {
+        "title": "Kezan Protocol",
+        "width": 1024,
+        "height": 768,
+        "resizable": true
+      }
+    ],
+    "allowlist": {
+      "http": {
+        "all": true
+      }
+    }
+  },
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "devPath": "./",
+    "distDir": "./"
+  }
+}
