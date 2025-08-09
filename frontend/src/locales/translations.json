@@ -1,0 +1,36 @@
+{
+  "es": {
+    "common": {
+      "buttons": {
+        "submit": "Enviar",
+        "cancel": "Cancelar",
+        "close": "Cerrar",
+        "save": "Guardar",
+        "delete": "Eliminar"
+      },
+      "alerts": {
+        "success": "Éxito",
+        "error": "Error",
+        "warning": "Advertencia",
+        "info": "Información"
+      }
+    }
+  },
+  "en": {
+    "common": {
+      "buttons": {
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "close": "Close",
+        "save": "Save",
+        "delete": "Delete"
+      },
+      "alerts": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Information"
+      }
+    }
+  }
+}
