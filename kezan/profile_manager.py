@@ -60,11 +60,12 @@ class ProfileManager:
         with open(profile_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             prefs = SearchPreferences(**data['preferences'])
+            prefs.price_thresholds = {int(k): v for k, v in prefs.price_thresholds.items()}
             return Profile(
                 version=version,
                 preferences=prefs,
                 last_scan=data.get('last_scan'),
-                auction_history=data.get('auction_history', {})
+                auction_history={int(k): v for k, v in (data.get('auction_history', {}) or {}).items()}
             )
 
     def save_profile(self, profile: Profile):
@@ -81,6 +82,8 @@ class ProfileManager:
             'last_scan': profile.last_scan,
             'auction_history': profile.auction_history
         }
+        
+        print(f"Saving profile: {data}")  # Log del estado de los datos antes de guardar
         
         with open(profile_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)

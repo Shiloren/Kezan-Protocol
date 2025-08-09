@@ -82,3 +82,16 @@ async def fetch_auction_data() -> dict | None:
     data = response.json()
     cache.set("auction_data", data, ttl=300)
     return data
+
+
+class BlizzardAPI:
+    def __init__(self):
+        self.token_url = BLIZZ_TOKEN_URL
+        self.auction_url = BLIZZ_AUCTION_URL
+        self.namespace = NAMESPACE
+
+    async def get_access_token(self) -> str | None:
+        return await get_access_token()
+
+    async def fetch_auction_data(self) -> dict | None:
+        return await fetch_auction_data()

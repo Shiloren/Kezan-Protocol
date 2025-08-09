@@ -145,3 +145,17 @@ def analyze_recipes_with_llm(
         raise RuntimeError(
             "El modelo de IA local no está activo o no responde."
         ) from exc
+
+
+class LLMInterface:
+    def __init__(self):
+        self.model = LLM_MODEL
+        self.api_url = LLM_API_URL
+        self.temperature = LLM_TEMPERATURE
+        self.top_p = LLM_TOP_P
+
+    def analyze_items(self, data: List[Dict]) -> str:
+        return analyze_items_with_llm(data)
+
+    def analyze_recipes(self, data: List[Dict], inventory: Optional[List[int]] = None) -> str:
+        return analyze_recipes_with_llm(data, inventory)
