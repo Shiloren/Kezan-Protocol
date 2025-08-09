@@ -3,19 +3,23 @@
 import json
 import os
 import time
+import logging
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 import httpx
-import logging
 
 from kezan.config import LOCAL_MODELS_PATH, validate_local_model_path
 
 # Configuración para el endpoint local del LLM
-LLM_API_URL = os.getenv("LLM_API_URL", "http://localhost:11434/api/generate")
+LLM_API_URL = os.getenv(
+    "LLM_API_URL", "http://localhost:11434/api/generate"
+)
 LLM_MODEL = os.getenv("LLM_MODEL", "mistral")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.7"))
 LLM_TOP_P = float(os.getenv("LLM_TOP_P", "0.9"))
+
+logger = logging.getLogger(__name__)
 
 
 def load_model_template(name: str) -> None:
@@ -27,7 +31,9 @@ def load_model_template(name: str) -> None:
 
     template_path = Path(LOCAL_MODELS_PATH) / f"{name}.json"
     if not template_path.is_file():
-        raise FileNotFoundError(f"No se encontró la plantilla de IA: {template_path}")
+        raise FileNotFoundError(
+            f"No se encontró la plantilla de IA: {template_path}"
+        )
 
     try:
         data = json.loads(template_path.read_text(encoding="utf-8"))
@@ -58,7 +64,8 @@ def analyze_items_with_llm(data: List[Dict]) -> str:
     """
     prompt = (
         "Eres un asistente experto en el mercado de World of Warcraft. "
-        "Analiza los siguientes items y recomienda las mejores compras en Español:\n"
+        "Analiza los siguientes items y recomienda las mejores compras "
+        "en Español:\n"
         f"{json.dumps(data, ensure_ascii=False)}"
     )
 
@@ -75,10 +82,13 @@ def analyze_items_with_llm(data: List[Dict]) -> str:
         response = httpx.post(LLM_API_URL, json=payload, timeout=30)
         elapsed = time.perf_counter() - start
         response.raise_for_status()
-        content = response.json().get("response", "").strip()
+        try:
+            content = response.json().get("response", "").strip()
+        except (ValueError, KeyError) as exc:
+            raise RuntimeError("Respuesta inválida del modelo de IA") from exc
         if not content:
             raise RuntimeError("Respuesta vacía del modelo de IA.")
-        logging.getLogger(__name__).info("LLM analysis took %.2fs", elapsed)
+        logger.info("LLM analysis took %.2fs", elapsed)
         return content
     except httpx.HTTPError as exc:
         raise RuntimeError(
@@ -100,11 +110,15 @@ def analyze_recipes_with_llm(
     """
     prompt = (
         "Eres un maestro artesano de World of Warcraft. Analiza las "
-        "siguientes recetas y recomienda los crafteos más rentables en Español:\n"
+        "siguientes recetas y recomienda los crafteos más rentables en "
+        "Español:\n"
         f"{json.dumps(data, ensure_ascii=False)}"
     )
     if inventory:
-        prompt += f"\nTen en cuenta que ya poseo en mi inventario: {inventory}."
+        prompt += (
+            "\nTen en cuenta que ya poseo en mi inventario: "
+            f"{inventory}."
+        )
 
     payload = {
         "model": LLM_MODEL,
@@ -119,10 +133,13 @@ def analyze_recipes_with_llm(
         response = httpx.post(LLM_API_URL, json=payload, timeout=30)
         elapsed = time.perf_counter() - start
         response.raise_for_status()
-        content = response.json().get("response", "").strip()
+        try:
+            content = response.json().get("response", "").strip()
+        except (ValueError, KeyError) as exc:
+            raise RuntimeError("Respuesta inválida del modelo de IA") from exc
         if not content:
             raise RuntimeError("Respuesta vacía del modelo de IA.")
-        logging.getLogger(__name__).info("LLM recipe analysis took %.2fs", elapsed)
+        logger.info("LLM recipe analysis took %.2fs", elapsed)
         return content
     except httpx.HTTPError as exc:  # pragma: no cover - network errors
         raise RuntimeError(

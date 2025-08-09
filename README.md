@@ -123,6 +123,29 @@ Ejecuta las pruebas unitarias:
 pytest tests/
 ```
 
+Para medir la cobertura:
+```bash
+coverage run -m pytest
+coverage report -m
+```
+
+### Análisis estático
+```bash
+flake8 kezan tests
+```
+
+### Dependencias
+- Python:
+  ```bash
+  pip list --outdated
+  pip-audit -r requirements.txt
+  ```
+- Frontend:
+  ```bash
+  npm outdated
+  npm audit
+  ```
+
 ---
 
 ## Errores comunes
