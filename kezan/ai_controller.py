@@ -13,6 +13,9 @@ from .profile_manager import ProfileManager, GameVersion
 from .llm_interface import LLMInterface
 from .logger import get_logger
 
+# Project root cached once to avoid recomputing in _validate_file_access
+_PROJECT_DIR = Path(__file__).parent.parent.resolve()
+
 @dataclass
 class AIControllerConfig:
     """Configuración para el controlador de IA."""
@@ -220,12 +223,10 @@ class AIController:
         if not file_path:
             return False
 
-        # Convertir a Path para manejo seguro de rutas
-        path = Path(file_path).resolve()
-        
-        # Verificar que el archivo está dentro del directorio del proyecto
-        project_dir = Path(__file__).parent.parent.resolve()
-        return project_dir in path.parents
+    # Convertir a Path para manejo seguro de rutas
+    path = Path(file_path).resolve()
+    # Verificar que el archivo está dentro del directorio del proyecto
+    return _PROJECT_DIR in path.parents
 
     def _load_memory(self) -> Dict[str, Any]:
         """

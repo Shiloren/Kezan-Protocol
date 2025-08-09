@@ -418,6 +418,33 @@
 				"--cov=kezan",
 				"--cov-report=term-missing"
 			]
+		},
+		{
+			"label": "verify-pytest-after-cleanup",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q"
+			]
+		},
+		{
+			"label": "pytest-skip-reasons",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"-rs"
+			]
+		},
+		{
+			"label": "run-tests-after-refactors",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
 		}
 	]
 }

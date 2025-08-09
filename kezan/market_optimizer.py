@@ -1,9 +1,23 @@
 from typing import List, Dict, Optional
-import numpy as np
+from typing import Any
 from datetime import datetime, timedelta
 import json
 from pathlib import Path
 import logging
+
+# Lazy numpy import support for lighter module import and easier testing.
+# Tests may monkeypatch this symbol; keep it at module scope.
+np: Any | None = None
+
+def _ensure_np() -> Any:
+    global np
+    if np is None:
+        try:
+            import numpy as _np  # type: ignore
+        except Exception as exc:  # pragma: no cover - exercised in error-branch tests
+            raise RuntimeError("NumPy no está disponible para el preprocesado") from exc
+        np = _np
+    return np
 
 class MarketDataProcessor:
     def __init__(self, cache_dir: str = ".cache"):
@@ -41,22 +55,23 @@ class MarketDataProcessor:
 
             # Calcular métricas y detectar anomalías
             for item_id, stats in item_stats.items():
-                prices = np.array(stats['prices'])
+                _np = _ensure_np()
+                prices = _np.array(stats['prices'])
                 
                 # Estadísticas básicas
                 processed['summary'][item_id] = {
-                    'min_price': float(np.min(prices)),
-                    'max_price': float(np.max(prices)),
-                    'mean_price': float(np.mean(prices)),
-                    'median_price': float(np.median(prices)),
-                    'std_price': float(np.std(prices)),
+                    'min_price': float(_np.min(prices)),
+                    'max_price': float(_np.max(prices)),
+                    'mean_price': float(_np.mean(prices)),
+                    'median_price': float(_np.median(prices)),
+                    'std_price': float(_np.std(prices)),
                     'total_listings': stats['count'],
                     'total_quantity': stats['total_quantity']
                 }
 
                 # Detección de anomalías (precios que se desvían significativamente)
-                z_scores = np.abs((prices - np.mean(prices)) / np.std(prices))
-                anomaly_indices = np.where(z_scores > 3)[0]
+                z_scores = _np.abs((prices - _np.mean(prices)) / _np.std(prices))
+                anomaly_indices = _np.where(z_scores > 3)[0]
                 
                 if len(anomaly_indices) > 0:
                     processed['anomalies'].extend([
