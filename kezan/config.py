@@ -17,9 +17,9 @@ from dotenv import load_dotenv
 # Load environment variables from a .env file if present
 load_dotenv()
 
-# Read configuration values with sensible defaults
-API_CLIENT_ID = os.getenv("BLIZZ_CLIENT_ID", "")
-API_CLIENT_SECRET = os.getenv("BLIZZ_CLIENT_SECRET", "")
+# Read configuration values with sensible defaults (support both prefixes)
+API_CLIENT_ID = os.getenv("BLIZZ_CLIENT_ID") or os.getenv("BLIZZARD_CLIENT_ID", "")
+API_CLIENT_SECRET = os.getenv("BLIZZ_CLIENT_SECRET") or os.getenv("BLIZZARD_CLIENT_SECRET", "")
 REGION = os.getenv("REGION", "eu")
 REALM_ID = os.getenv("REALM_ID", "1080")  # Ejemplo: Sanguino
 

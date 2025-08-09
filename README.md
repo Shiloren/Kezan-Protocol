@@ -24,27 +24,21 @@ Kezan Protocol es una herramienta diseñada para analizar mercados virtuales en 
 
 ## Arquitectura
 
-1. **Extracción de datos**
-   - `blizzard_api`: Obtiene un token OAuth y descarga las subastas del reino configurado.
+Tres piezas trabajan juntas para optimizar el comercio en WoW:
 
-2. **Análisis de mercado**
-   - `analyzer`: Filtra los lotes más rentables y los formatea con `formatter`.
+1) Addon Kezan Protocol (WoW)
+   - Escaneo de AH (full o selectivo) y captura de stats de crafteo (multicraft, resourcefulness, inspiration, craftingSpeed, skill y reagentes).
+   - Guarda en SavedVariables con estructura compacta. Ver `docs/addon-spec.md`.
 
-3. **Análisis de crafteo**
-   - `crafting_analyzer`: Evalúa recetas usando precios de mercado.
+2) Bot de históricos en la nube
+   - Cada hora descarga `/data/wow/connected-realm/{id}/auctions` y opcionalmente `/data/wow/auctions/commodities`.
+   - Guarda snapshots comprimidos por clave `region:realm:YYYY-MM-DDTHH.json.gz`. Ver `docs/bot-spec.md`.
 
-4. **IA local (asesoría-only, Blizzard-safe)**
-   - `llm_interface`: Envía los datos a un modelo local (Ollama o servidores OpenAI-compatibles como LM Studio) y aplica guardarraíles de cumplimiento (`compliance`) para generar recomendaciones en español usando una DSL de solo asesoría.
+3) Cliente Kezan Protocol (PC)
+   - Lee SavedVariables del addon y descarga el snapshot más reciente del bot.
+   - Cruza datos locales vs globales, aplica ML ligero y valida top-N con IA local (Llama 3 8B Instruct cuantizado).
 
-5. **API y UI**
-   - `api`: Expone endpoints REST.
-   - `frontend/`: Interfaz de usuario basada en Tauri + React.
-
-6. **Persistencia y utilidades**
-   - `cache`: Almacena tokens y resultados.
-   - `context_memory`: Guarda históricos.
-   - `export`: Permite volcar datos a CSV/JSON.
-   - `logger`: Mantiene registros rotativos.
+Diagrama de flujo (conceptual): Addon ↔ Cliente PC ↔ Bot/API Blizzard, con rutas gratis y Premium diferenciadas. Ver `docs/integration-guide.md`.
 
 ---
 
@@ -90,7 +84,11 @@ Notas IA:
 ## Configuración inicial
 
 1. Crea un archivo `.env` basado en `example.env`.
-2. Configura las credenciales de la API de Blizzard (`BLIZZ_CLIENT_ID`, `BLIZZ_CLIENT_SECRET`).
+2. Configura las credenciales de la API de Blizzard (se aceptan ambos prefijos):
+   - `BLIZZ_CLIENT_ID` o `BLIZZARD_CLIENT_ID`
+   - `BLIZZ_CLIENT_SECRET` o `BLIZZARD_CLIENT_SECRET`
+   - `REGION` (ej. `eu`, `us`)
+   - `REALM_ID` (connected realm ID)
 3. (Opcional) Configura IA local:
    - Variables: `LLM_API_URL` (por defecto `http://localhost:11434/api/generate`), `LLM_MODEL`, `LLM_API_KEY` (si usas OpenAI-style).
    - Plantillas de modelo en `templates/*.json` (usa `load_model_template(nombre)` para aplicarlas).
@@ -183,6 +181,20 @@ Para la visión, arquitectura, DSL de asesoría y guardarraíles Blizzard-safe, 
 - docs/kezan_protocol_master_prompt.md
 
 Toda nueva funcionalidad debe alinearse con esta guía. Si surgen decisiones de arquitectura o criterios adicionales, añade esa información al documento y versiona el cambio.
+
+---
+
+## Planes y monetización
+
+- Plan gratuito:
+   - Escaneo local (addon), análisis básico con histórico limitado, IA local.
+   - Límite diario de consultas al histórico remoto.
+- Plan Premium (mensual/trimestral):
+   - Histórico 12 meses, comparativas multi-servidor/facción, IA en la nube con contexto ampliado.
+   - Alertas en tiempo real y reportes automáticos.
+   - Acceso controlado por API Key y endpoint `/premium-check`.
+
+Detalles en `docs/monetization.md`.
 
 ---
 

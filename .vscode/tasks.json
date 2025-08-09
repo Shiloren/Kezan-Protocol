@@ -1,0 +1,423 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run full pytest with coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full pytest with coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full pytest with coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full pytest with coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run only mocked market optimizer test",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"tests/test_market_optimizer_mocked.py",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
+		},
+		{
+			"label": "Run mocked market optimizer test again",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"tests/test_market_optimizer_mocked.py",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
+		},
+		{
+			"label": "Run mocked market optimizer test again",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"tests/test_market_optimizer_mocked.py",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
+		},
+		{
+			"label": "Run full pytest with coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full pytest with coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run tests after adding analyzer coverage tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run tests after adding auction analyzer tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run tests after adding realtime monitor tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full tests aiming for >=90%",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Final full test run for >=90%",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run targeted tests after memory_manager fix",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"tests/test_api_controller_more.py::test_analyze_market_data_and_strategy_branches",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
+		},
+		{
+			"label": "Run new targeted tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"tests/test_ai_controller_branches.py",
+				"tests/test_profile_routes_more.py",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Full suite after adding tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Re-run full suite for final coverage",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full test suite after docs and modules",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "Run full suite to hit ≥90% again",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-pytest-cov",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-2",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-3",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-4",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-after-new-tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-after-patch-2",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-after-fix-3",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-after-removals",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-final-batch",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-stabilize",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-green",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-green-2",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-all-pytest-green-3",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		},
+		{
+			"label": "run-pytest-after-fix-1",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings",
+				"--cov=kezan",
+				"--cov-report=term-missing"
+			]
+		}
+	]
+}

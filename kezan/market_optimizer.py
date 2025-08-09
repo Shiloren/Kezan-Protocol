@@ -162,12 +162,12 @@ Proporciona un análisis considerando:
 4. Recomendaciones de acción
 
 Formato: Responde en JSON con las siguientes claves:
-{
-    "analysis": string,
-    "opportunities": array,
-    "risks": array,
-    "actions": array
-}
+{{
+    "analysis": "string",
+    "opportunities": [],
+    "risks": [],
+    "actions": []
+}}
 """
         return optimized
 

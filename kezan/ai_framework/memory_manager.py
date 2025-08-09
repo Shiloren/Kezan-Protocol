@@ -54,6 +54,15 @@ class ContextMemory:
         self.current_context['successful_strategies'].append(strategy)
         self.save_memory()
 
+    # Alias conveniente para los tests/llamadas que hablan de "estrategias similares"
+    def add_similar_strategy(self, strategy: Dict):
+        """Agrega una estrategia considerada similar (se guarda como exitosa).
+
+        Este método es un alias semántico de add_successful_strategy para mantener
+        compatibilidad con llamadas que registran estrategias similares previas.
+        """
+        self.add_successful_strategy(strategy)
+
     def get_similar_strategies(self, conditions: Dict) -> List[Dict]:
         """Busca estrategias similares basadas en condiciones dadas."""
         strategies = self.current_context.get('successful_strategies', [])

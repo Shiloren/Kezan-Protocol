@@ -118,6 +118,62 @@ class AIController:
             self.logger.error(f"Error en operación de archivo: {e}")
             return {'error': str(e)}
 
+    def _read_file(self, file_path: str) -> Dict[str, Any]:
+        """Lee un archivo de texto/JSON de manera segura dentro del repo.
+
+        Retorna un dict con metadatos y contenido. Si es JSON válido, incluye la clave 'json'.
+        """
+        if not self._validate_file_access(file_path):
+            raise PermissionError(f"Acceso denegado al archivo: {file_path}")
+
+        p = Path(file_path)
+        if not p.exists() or not p.is_file():
+            return {"error": "Archivo no encontrado", "path": str(p)}
+
+        text = p.read_text(encoding="utf-8", errors="replace")
+        result: Dict[str, Any] = {"path": str(p), "size": p.stat().st_size, "content": text[:5000]}
+        try:
+            result["json"] = json.loads(text)
+        except Exception:
+            pass
+        return result
+
+    def _write_file(self, file_path: str, data: Any) -> Dict[str, Any]:
+        """Escribe datos en un archivo dentro del repo de forma segura.
+
+        Si data es dict/list, se serializa como JSON; en otro caso, como texto.
+        """
+        if not self._validate_file_access(file_path):
+            raise PermissionError(f"Acceso denegado al archivo: {file_path}")
+
+        p = Path(file_path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            if isinstance(data, (dict, list)):
+                p.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            else:
+                p.write_text(str(data), encoding="utf-8")
+            return {"path": str(p), "written": True}
+        except Exception as e:
+            return {"error": str(e), "path": str(p)}
+
+    async def _handle_local_query(self, intent: Dict[str, Any]) -> Dict[str, Any]:
+        """Maneja consultas locales que no requieren API ni archivos.
+
+        Devuelve una respuesta simple con eco de la intención. Este método existe para
+        soportar escenarios donde la intención analizada no implica acciones externas.
+        """
+        try:
+            operation = intent.get('operation') or 'noop'
+            return {
+                'status': 'ok',
+                'operation': operation,
+                'intent': intent,
+            }
+        except Exception as e:
+            self.logger.error(f"Error en operación local: {e}")
+            return {'error': str(e)}
+
     def _can_make_request(self) -> bool:
         """
         Verifica si se puede hacer una nueva petición según los límites configurados.
