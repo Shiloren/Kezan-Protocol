@@ -1,90 +1,84 @@
 # Guía de Contribución
 
-¡Gracias por tu interés en contribuir al Kezan Protocol! Esta guía te ayudará a configurar tu entorno de desarrollo y a entender nuestro proceso de contribución.
+¡Gracias por tu interés en contribuir al Kezan Protocol! Esta guía te ayuda a configurar tu entorno y alinea el proceso de PRs con la visión del proyecto.
 
-Antes de empezar, revisa el documento maestro del proyecto y alinea tus cambios con su visión/arquitectura/DSL:
+Antes de empezar, revisa y respeta el documento maestro:
+- `docs/kezan_protocol_master_prompt.md`
 
-- docs/kezan_protocol_master_prompt.md
+## Configuración del entorno (Windows PowerShell)
 
-## Configuración del Entorno
-
-### Requisitos Previos
+### Requisitos previos
 - Python 3.12+
 - Node.js 18+
-- Rust (para Tauri)
+- Rust (para Tauri UI)
 
-### Pasos de Instalación
-
-1. Clona el repositorio:
-```bash
+### Pasos
+```powershell
+# Clonar y preparar entorno
 git clone https://github.com/Shiloren/Kezan-Protocol.git
 cd Kezan-Protocol
-```
-
-2. Configura el entorno Python:
-```bash
-python -m venv venv
-source venv/bin/activate  # En Windows: .\venv\Scripts\activate
+python -m venv .venv; .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-```
 
-3. Configura el frontend:
-```bash
+# Variables de entorno
+Copy-Item example.env .env
+# Edita .env con BLIZZ_* / BLIZZARD_* / REGION / REALM_ID
+
+# API local (ASGI)
+python -m pip install uvicorn
+uvicorn main:app --reload
+
+# UI (opcional)
 cd frontend
 npm install
+npm run dev:tauri
 ```
 
-## Estructura del Proyecto
+## Estructura del proyecto
+- `kezan/` código Python (API, análisis, LLM, etc.)
+- `frontend/` Tauri/React
+- `tests/` pruebas unitarias
+- `docs/` documentación generada y guías
 
-- `/kezan/` - Código fuente principal de Python
-- `/frontend/` - Aplicación Tauri/React
-- `/tests/` - Tests unitarios y de integración
-- `/docs/` - Documentación
+## Estilo y calidad
+- Python: `black --check .`, `ruff check .`, type hints, docstrings.
+- JS/React: ESLint/Prettier (si aplica en el futuro), componentes funcionales.
 
-## Guías de Estilo
+## Tests y cobertura
+```powershell
+pytest -q --disable-warnings --cov=kezan --cov-report=term-missing
+# Reporte HTML
+if (Test-Path htmlcov) { Remove-Item htmlcov -Recurse -Force }
+pytest -q --disable-warnings --cov=kezan --cov-report=html
+```
+Objetivo de cobertura: ≥95%.
 
-### Python
-- Seguimos PEP 8
-- Usamos type hints
-- Documentamos funciones y clases con docstrings
+Notas:
+- `market_optimizer` usa NumPy en runtime; instala `numpy` si lo necesitas. Las pruebas usan un shim cuando no está presente.
+- Para LLM local, usa `LLM_API_URL`, `LLM_MODEL` y (OpenAI-style) `LLM_API_KEY`.
 
-### JavaScript/React
-- Usamos ESLint y Prettier
-- Componentes funcionales con hooks
-- Props tipadas con PropTypes
+## Documentación
+Generar docs de módulos (pdoc) hacia `docs/` y exportar a Word/PDF:
+```powershell
+python -m pip install pdoc
+pdoc -o docs kezan
+python .\docs\generate_documents.py
+```
 
-## Proceso de Contribución
+## Proceso de PR
+1. Crea rama: `git checkout -b feat/nombre-breve`.
+2. Implementa con tests y docstrings.
+3. Ejecuta linters y tests con cobertura.
+4. Actualiza README/Docs si cambia el uso o configuración.
+5. Abre PR con resumen, impacto, y resultados de tests/cobertura.
 
-1. Crea un fork del repositorio
-2. Crea una rama para tu feature: `git checkout -b feature/nombre-feature`
-3. Desarrolla tu feature siguiendo las guías de estilo
-4. Asegúrate de que los tests pasan: `pytest tests/`
-5. Crea un Pull Request con una descripción clara de los cambios
+Checklist de PRs:
+- [ ] Alineado con `docs/kezan_protocol_master_prompt.md` (visión/arquitectura/DSL)
+- [ ] Tests añadidos/actualizados y cobertura ≥95% si aplica
+- [ ] Sin romper API pública; anota breaking changes si existen
+- [ ] README/Docs actualizados
 
-Checklist rápida para PRs:
-- [ ] Cambios alineados con `docs/kezan_protocol_master_prompt.md` (sección de visión/arquitectura/IA/DSL)
-- [ ] Si cambias reglas DSL o su parser, actualiza la sección 9 del documento maestro
-- [ ] Mantén el enfoque plug & play (instalación sencilla, simulador integrado); no violes ToS de Blizzard
-- [ ] Añade/actualiza tests y documentación
+## Reporte de bugs
+- Abre un issue con: descripción, pasos, esperado vs actual, logs y entorno.
 
-## Tests
-
-- Ejecuta tests Python: `pytest tests/`
-- Ejecuta tests Frontend: `cd frontend && npm test`
-
-## Reportar Bugs
-
-Usa los issues de GitHub para reportar bugs. Incluye:
-- Descripción clara del problema
-- Pasos para reproducir
-- Comportamiento esperado vs actual
-- Screenshots si aplica
-- Información del entorno
-
-## Contacto
-
-Para preguntas o dudas, puedes:
-- Abrir un issue
-- Contactar al equipo mediante [medio de contacto preferido]
-
-¡Gracias por contribuir!
+¡Gracias por contribuir! 🧠💼

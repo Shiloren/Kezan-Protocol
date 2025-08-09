@@ -35,7 +35,9 @@ Acciones prohibidas (se sanea automáticamente): `BUY`, `CRAFT`, `POST`, `UNDERC
 - Limitar tamaño de prompts (en `llm_interface` ya se recorta entrada en algunas rutas).
 
 ## Pruebas
-- Cobertura objetivo: 80%+. Ejecuta:
+- Cobertura objetivo: ≥95%.
+- Ejecuta cobertura en terminal o HTML:
 ```
+pytest -q --disable-warnings --cov=kezan --cov-report=term-missing
 pytest -q --disable-warnings --cov=kezan --cov-report=html
 ```

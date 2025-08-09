@@ -14,6 +14,7 @@
 - [Pruebas](#pruebas)
 - [Errores comunes](#errores-comunes)
  - [Guía maestra del proyecto](#guía-maestra-del-proyecto)
+ - [Documentación y build de docs](#documentación-y-build-de-docs)
 
 ---
 
@@ -98,15 +99,23 @@ Notas IA:
 ## Ejecución
 
 ### API HTTP
-Ejecuta el backend con FastAPI:
-```bash
-python main.py
+Ejecuta el backend con FastAPI (ASGI) usando Uvicorn:
+
+```powershell
+# Entorno virtual recomendado (Windows PowerShell)
+python -m venv .venv; .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# Levantar la API en http://127.0.0.1:8000
+python -m pip install uvicorn
+uvicorn main:app --reload
 ```
 
 ### Interfaz de escritorio
 Ejecuta la aplicación Tauri:
-```bash
+```powershell
 cd frontend
+npm install
 npm run dev:tauri
 ```
 
@@ -122,47 +131,57 @@ npm run dev:tauri
 ---
 
 ## Módulos principales
-- **`blizzard_api`**: Gestión de autenticación y descarga de datos.
-- **`analyzer`**: Análisis de subastas.
-- **`crafting_analyzer`**: Evaluación de recetas.
-- **`llm_interface`**: Integración con modelos de lenguaje.
-- **`frontend/`**: Interfaz de usuario.
+- **`blizzard_api`**: Gestión OAuth y descarga de datos (subastas, commodities).
+- **`analyzer`**: Agregados y top-N de oportunidades.
+- **`crafting_analyzer`**: Evaluación de recetas y costes efectivos.
+- **`auction_analyzer`**: Escaneos y alertas por umbrales (watched items).
+- **`realtime_monitor`**: Monitor en tiempo real y snapshots de mercado.
+- **`llm_interface`**: Integración con LLM (Ollama y OpenAI-style) con guardarraíles Blizzard-safe.
+- **`market_optimizer`**: Preprocesado (requiere NumPy si se usa en runtime).
+- **`cloud_history`**: Carga/descarga de snapshots comprimidos (gzip JSON).
+- **`sv_parser`**: Parseo de SavedVariables del addon.
+- **`frontend/`**: Interfaz Tauri/React.
 
 ---
 
 ## Pruebas y cobertura
 Ejecuta las pruebas unitarias y genera cobertura en terminal:
-```bash
+```powershell
 pytest -q --disable-warnings --cov=kezan --cov-report=term-missing
 ```
 
-Para reporte HTML limpio:
-```bash
-rd /s /q htmlcov  # Windows
+Para reporte HTML:
+```powershell
+if (Test-Path htmlcov) { Remove-Item htmlcov -Recurse -Force }
 pytest -q --disable-warnings --cov=kezan --cov-report=html
 ```
 
-Áreas nuevas cubiertas por tests:
-- `llm_interface`: rutas síncronas/asíncronas, Ollama vs OpenAI-style, fallbacks seguros.
-- `ai_controller`: límites de tasa, validaciones de operación/archivos, persistencia de memoria.
+Estado actual de cobertura: ~92% (objetivo ≥95%).
+
+Áreas cubiertas por tests recientes:
+- `llm_interface`: ramas de errores (HTTP/JSON), prompts con inventario, sanitización DSL.
+- `realtime_monitor`: timestamps y age_seconds en snapshots.
+- `auction_analyzer`: alertas por umbral en watched items.
+- `cloud_history`: paths de fallo en gzip/JSON/ausencia de backend.
+- `market_optimizer`: shim de NumPy para preprocesado y rama de error.
 
 ### Análisis estático
-```bash
+```powershell
 ruff check .
 black --check .
 ```
 
 ### Dependencias
 - Python:
-  ```bash
-  pip list --outdated
-  pip-audit -r requirements.txt
-  ```
+   ```powershell
+   pip list --outdated
+   pip install pip-audit; pip-audit -r requirements.txt
+   ```
 - Frontend:
-  ```bash
-  npm outdated
-  npm audit
-  ```
+   ```powershell
+   npm outdated
+   npm audit
+   ```
 
 ---
 
@@ -172,6 +191,13 @@ black --check .
 
 2. **Problemas con dependencias**:
    - Verifica que las versiones de Python y Node.js sean compatibles.
+
+3. **NumPy no instalado**:
+   - El módulo `market_optimizer` importa NumPy. Si vas a usar preprocesado avanzado en runtime, instala `numpy`:
+   ```powershell
+   python -m pip install numpy
+   ```
+   (Las pruebas usan un shim para evitar dependencia dura.)
 
 ---
 
@@ -199,3 +225,20 @@ Detalles en `docs/monetization.md`.
 ---
 
 Este README proporciona una visión completa del proyecto, tanto para usuarios como para desarrolladores. Si necesitas más detalles, consulta la documentación en la carpeta `docs/`. ¡Disfruta explorando el mercado con Kezan Protocol! 🚀
+
+---
+
+## Documentación y build de docs
+
+- Documentación de API (pdoc) ya generada en `docs/` (HTML estático).
+- Regenerar documentación de módulos:
+   ```powershell
+   python -m pip install pdoc
+   pdoc -o docs kezan
+   ```
+- Exportar a Word/PDF (a partir de HTML):
+   ```powershell
+   python .\docs\generate_documents.py
+   ```
+
+En `docs/index.html` hay enlaces rápidos a la guía maestra y requisitos de IA.
