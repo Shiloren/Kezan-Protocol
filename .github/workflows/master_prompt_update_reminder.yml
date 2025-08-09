@@ -1,0 +1,28 @@
+name: Master Prompt Update Reminder
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Warn if master prompt not updated
+        run: |
+          set -e
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          CHANGED=$(git --no-pager diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          echo "Changed files:" && echo "$CHANGED"
+          # If core areas changed but master prompt was not updated, emit a warning (non-blocking)
+          if echo "$CHANGED" | grep -E '^(kezan/|frontend/|templates/|docs/|installer/|main.py|requirements.txt)' >/dev/null; then
+            if ! echo "$CHANGED" | grep -E '^docs/kezan_protocol_master_prompt.md$' >/dev/null; then
+              echo "::warning title=Update master prompt::Core areas changed without updating docs/kezan_protocol_master_prompt.md. Consider syncing vision/DSL (section 9) and related guidance."
+            fi
+          fi

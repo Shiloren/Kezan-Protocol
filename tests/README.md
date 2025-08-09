@@ -23,3 +23,7 @@ Este directorio contiene pruebas unitarias, de integración y de seguridad para 
 ## Contribuir
 
 Por favor, asegúrate de seguir las guías de estilo y agregar pruebas relevantes para cualquier cambio en el código.
+
+### Nota sobre nombres de archivos de test
+- Evita duplicar el mismo nombre de archivo de prueba en subcarpetas diferentes (p. ej., `tests/test_x.py` y `tests/unit_tests/test_x.py`). Pytest puede importar el módulo equivocado y fallar la recolección con "import file mismatch".
+- Usa nombres únicos o consolida los tests en una sola ubicación.

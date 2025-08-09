@@ -76,7 +76,7 @@ class ProfileManager:
             'preferences': {
                 'default_realm': profile.preferences.default_realm,
                 'watched_items': profile.preferences.watched_items,
-                'price_thresholds': profile.preferences.price_thresholds,
+                'price_thresholds': {str(k): v for k, v in profile.preferences.price_thresholds.items()},
                 'notification_enabled': profile.preferences.notification_enabled
             },
             'last_scan': profile.last_scan,

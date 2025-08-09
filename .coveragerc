@@ -1,0 +1,11 @@
+[run]
+source = kezan
+branch = True
+parallel = False
+
+[report]
+show_missing = True
+skip_covered = False
+
+[html]
+title = Kezan Protocol Coverage

@@ -2,6 +2,10 @@
 
 ¡Gracias por tu interés en contribuir al Kezan Protocol! Esta guía te ayudará a configurar tu entorno de desarrollo y a entender nuestro proceso de contribución.
 
+Antes de empezar, revisa el documento maestro del proyecto y alinea tus cambios con su visión/arquitectura/DSL:
+
+- docs/kezan_protocol_master_prompt.md
+
 ## Configuración del Entorno
 
 ### Requisitos Previos
@@ -56,6 +60,12 @@ npm install
 3. Desarrolla tu feature siguiendo las guías de estilo
 4. Asegúrate de que los tests pasan: `pytest tests/`
 5. Crea un Pull Request con una descripción clara de los cambios
+
+Checklist rápida para PRs:
+- [ ] Cambios alineados con `docs/kezan_protocol_master_prompt.md` (sección de visión/arquitectura/IA/DSL)
+- [ ] Si cambias reglas DSL o su parser, actualiza la sección 9 del documento maestro
+- [ ] Mantén el enfoque plug & play (instalación sencilla, simulador integrado); no violes ToS de Blizzard
+- [ ] Añade/actualiza tests y documentación
 
 ## Tests
 
