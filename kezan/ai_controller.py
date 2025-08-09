@@ -222,11 +222,10 @@ class AIController:
         """
         if not file_path:
             return False
-
-    # Convertir a Path para manejo seguro de rutas
-    path = Path(file_path).resolve()
-    # Verificar que el archivo está dentro del directorio del proyecto
-    return _PROJECT_DIR in path.parents
+        # Convertir a Path para manejo seguro de rutas
+        path = Path(file_path).resolve()
+        # Verificar que el archivo está dentro del directorio del proyecto
+        return _PROJECT_DIR in path.parents
 
     def _load_memory(self) -> Dict[str, Any]:
         """

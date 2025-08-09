@@ -1,0 +1,149 @@
+name: Roadmap Sync
+
+'on':
+  workflow_dispatch:
+  push:
+    paths:
+      - 'docs/ROADMAP.md'
+
+permissions:
+  contents: read
+  issues: write
+  repository-projects: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure labels and milestones
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const labels = [
+              {name: 'roadmap', color: '0e8a16', description:'Roadmap item'},
+              {name: 'horizon:now', color: '5319e7'},
+              {name: 'horizon:next', color: '5319e7'},
+              {name: 'horizon:later', color: '5319e7'},
+              {name: 'component:addon', color: '0052cc'},
+              {name: 'component:bot', color: '0052cc'},
+              {name: 'component:client', color: '0052cc'}
+            ];
+            for (const l of labels) {
+              try {
+                await github.rest.issues.getLabel({owner: context.repo.owner, repo: context.repo.repo, name: l.name});
+              } catch (e) {
+                await github.rest.issues.createLabel({owner: context.repo.owner, repo: context.repo.repo, name: l.name, color: l.color, description: l.description||''});
+              }
+            }
+            const wanted = ['Now','Next','Later'];
+            const {data: ms} = await github.rest.issues.listMilestones({owner: context.repo.owner, repo: context.repo.repo, state:'open'});
+            for (const t of wanted) {
+              if (!ms.find(m => m.title === t)) {
+                await github.rest.issues.createMilestone({owner: context.repo.owner, repo: context.repo.repo, title: t});
+              }
+            }
+      - name: Sync issues from ROADMAP
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const md = fs.readFileSync('docs/ROADMAP.md', 'utf8');
+            function block(title){ const re = new RegExp('^### '+title+'[\\s\\S]*?(?=^### |\n## |\n$)','m'); const m = md.match(re); return m?m[0]:''; }
+            function tasks(section){
+              const sec = block(section);
+              return sec.split('\n').filter(l=>/^\- \[[ x~]\] /.test(l)).map(l=>{
+                const status = (l.match(/\[([ x~])\]/)||[])[1]||' ';
+                let title = l.replace(/^\- \[[ x~]\] /,'').trim();
+                return {status, title};
+              });
+            }
+            const map = {
+              'Now (0–4 semanas)': {label:'horizon:now', milestone:'Now'},
+              'Next (1–3 meses)': {label:'horizon:next', milestone:'Next'},
+              'Later (3–6 meses)': {label:'horizon:later', milestone:'Later'}
+            };
+            const items = [];
+            for (const key of Object.keys(map)) {
+              for (const t of tasks(key)) items.push({...t, horizon:key});
+            }
+            const {data: openIssues} = await github.rest.issues.listForRepo({owner: context.repo.owner, repo: context.repo.repo, state:'open', per_page: 100});
+            const milestones = (await github.rest.issues.listMilestones({owner: context.repo.owner, repo: context.repo.repo, state:'open'})).data;
+            const msId = h => { const m = milestones.find(x=>x.title===map[h].milestone); return m?m.number:undefined; };
+            for (const it of items) {
+              const title = `[Roadmap] ${it.title}`;
+              let issue = openIssues.find(i=>i.title===title);
+              const labels = ['roadmap', map[it.horizon].label];
+              const lower = it.title.toLowerCase();
+              if (lower.includes('addon')) labels.push('component:addon');
+              else if (lower.includes('bot')) labels.push('component:bot');
+              else labels.push('component:client');
+              const body = `Estado: ${it.status==='x'?'Completado':it.status==='~'?'En desarrollo':'Pendiente'}\n\nOrigen: docs/ROADMAP.md`;
+              if (!issue) {
+                issue = (await github.rest.issues.create({owner: context.repo.owner, repo: context.repo.repo, title, body, labels, milestone: msId(it.horizon)})).data;
+              } else {
+                await github.rest.issues.update({owner: context.repo.owner, repo: context.repo.repo, issue_number: issue.number, body, milestone: msId(it.horizon)});
+                await github.rest.issues.setLabels({owner: context.repo.owner, repo: context.repo.repo, issue_number: issue.number, labels});
+              }
+              if (it.status==='x' && issue.state !== 'closed') {
+                await github.rest.issues.update({owner: context.repo.owner, repo: context.repo.repo, issue_number: issue.number, state:'closed'});
+              }
+            }
+      - name: Sync Project board (classic) from ROADMAP issues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Use Classic Projects API (inertia preview)
+            const owner = context.repo.owner; const repo = context.repo.repo;
+            const mediaType = {previews: ['inertia']};
+            // Ensure project "Roadmap"
+            let projects = (await github.rest.projects.listForRepo({owner, repo, mediaType})).data;
+            let project = projects.find(p=>p.name==='Roadmap');
+            if (!project) {
+              project = (await github.rest.projects.createForRepo({owner, repo, name:'Roadmap', body:'Sync desde docs/ROADMAP.md', mediaType})).data;
+            }
+            // Ensure columns
+            let cols = (await github.rest.projects.listColumns({project_id: project.id, mediaType})).data;
+            async function ensureCol(name){
+              let c = cols.find(x=>x.name===name);
+              if (!c) { c = (await github.rest.projects.createColumn({project_id: project.id, name, mediaType})).data; cols.push(c); }
+              return c;
+            }
+            const colPending = await ensureCol('Pendiente');
+            const colDoing = await ensureCol('En desarrollo');
+            const colDone = await ensureCol('Completado');
+
+            // Map issues by title
+            const {data: openIssues} = await github.rest.issues.listForRepo({owner, repo, state:'all', per_page: 100});
+            const roadIssues = openIssues.filter(i=>i.title.startsWith('[Roadmap] '));
+
+            // Helper to find/move/add card for an issue
+            async function upsertCard(issue, targetCol){
+              // search existing cards across columns
+              const allCols = [colPending, colDoing, colDone];
+              let card = null, currentCol = null;
+              for (const c of allCols) {
+                const cards = (await github.rest.projects.listCards({column_id: c.id, per_page: 100, mediaType})).data;
+                const found = cards.find(cd => cd.content_url && cd.content_url.endsWith(`/issues/${issue.number}`));
+                if (found) { card = found; currentCol = c; break; }
+              }
+              if (!card) {
+                await github.rest.projects.createCard({column_id: targetCol.id, content_id: issue.id, content_type: 'Issue', mediaType});
+              } else if (currentCol.id !== targetCol.id) {
+                await github.rest.projects.moveCard({card_id: card.id, position: 'top', column_id: targetCol.id, mediaType});
+              }
+            }
+
+            // Determine target column by status label or body
+            function statusFromBody(body){
+              if (!body) return 'pending';
+              if (body.includes('Completado')) return 'done';
+              if (body.includes('En desarrollo')) return 'doing';
+              return 'pending';
+            }
+
+            for (const issue of roadIssues) {
+              const st = statusFromBody(issue.body||'');
+              const col = st==='done'? colDone : st==='doing'? colDoing : colPending;
+              await upsertCard(issue, col);
+            }

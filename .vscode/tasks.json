@@ -445,6 +445,36 @@
 				"--maxfail=1",
 				"--disable-warnings"
 			]
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "pytest",
+			"args": [
+				"-q",
+				"--maxfail=1",
+				"--disable-warnings"
+			]
 		}
 	]
 }

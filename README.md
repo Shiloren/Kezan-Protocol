@@ -111,6 +111,10 @@ python -m pip install uvicorn
 uvicorn main:app --reload
 ```
 
+Endpoints nuevos (básicos):
+- POST `/api/simulate` → backtest mínimo del simulador v1 (placeholder seguro)
+- GET `/api/premium-check` → plan actual (placeholder: Free/Pro según api_key)
+
 ### Interfaz de escritorio
 Ejecuta la aplicación Tauri:
 ```powershell
@@ -210,6 +214,14 @@ Toda nueva funcionalidad debe alinearse con esta guía. Si surgen decisiones de 
 
 ---
 
+## Roadmap
+El roadmap detallado y fuente de verdad está en:
+- docs/ROADMAP.md
+
+Nota: El Prompt Maestro incluye un snapshot resumido para dar contexto a la IA; el archivo docs/ROADMAP.md es el canónico para seguimiento y PRs.
+
+---
+
 ## Planes y monetización
 
 - Plan gratuito:
@@ -242,3 +254,26 @@ Este README proporciona una visión completa del proyecto, tanto para usuarios c
    ```
 
 En `docs/index.html` hay enlaces rápidos a la guía maestra y requisitos de IA.
+
+---
+
+## Documentación de trabajo (docs/temp_flow)
+Para notas y borradores en curso utiliza:
+- docs/temp_flow/
+
+Importante: docs/temp_flow no es fuente de verdad. Cuando un contenido madure, muévelo a:
+- Documentación oficial: docs/*.md
+- Roadmap canónico: docs/ROADMAP.md
+
+---
+
+## Política de versiones y changelog
+
+- Versionado semántico: MAJOR.MINOR.PATCH.
+- Todo cambio visible (feat/fix/perf/docs/tests/chore) debe añadirse a `CHANGELOG.md` con fecha y breve descripción.
+- Nuevas features o cambios de uso deben actualizar README y `docs/`.
+- Los PRs deben marcar las casillas de actualización de changelog y docs (ver plantilla de PR).
+
+Skips intencionales en pruebas:
+- `tests/test_market_optimizer_chunks_context.py`: deshabilitado por redundancia con otras pruebas de `market_optimizer`.
+- `tests/test_coverage_uplift.py`: salta si `numpy` no está instalado (evita dependencia dura en entornos mínimos; `market_optimizer` realiza import perezoso de NumPy en runtime).

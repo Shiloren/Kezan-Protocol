@@ -1,10 +1,11 @@
 """Rutas de la API de Kezan Protocol."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Body, Query
 from kezan.analyzer import get_top_items
 from kezan.llm_interface import analyze_items_with_llm, analyze_recipes_with_llm
 from kezan.recipes import load_recipes
 from kezan.crafting_analyzer import analyze_recipes
+from kezan.simulator import run_backtest
 
 router = APIRouter(prefix="/api", tags=["Kezan Protocol"])
 
@@ -48,3 +49,29 @@ async def crafteables(profesion: str, min_profit: float = 0.0, limit: int = 5):
         return {"recomendacion": advice, "recetas": profitable}
     except RuntimeError as exc:
         return {"error": str(exc), "recetas": profitable}
+
+
+@router.post("/simulate")
+async def simulate(strategy: dict = Body(..., description="Estrategia o regla DSL a simular")):
+    """Ejecuta un backtest mínimo y devuelve métricas prototipo.
+
+    Nota: placeholder inicial hasta integrar históricos reales.
+    """
+    res = run_backtest(strategy=strategy, history=None)
+    return {
+        "roi": res.roi,
+        "volatility": res.volatility,
+        "est_time_to_sell_h": res.est_time_to_sell_h,
+        "trades": res.trades,
+        "notes": res.notes,
+    }
+
+
+@router.get("/premium-check")
+async def premium_check(api_key: str = Query(None, description="API key opcional para planes Premium")):
+    """Valida (placeholder) el plan del usuario.
+
+    Por ahora, si hay api_key devolvemos plan 'Pro', si no 'Free'.
+    """
+    plan = "Pro" if api_key else "Free"
+    return {"plan": plan, "features": ["advisor_mode", "recommendations", "simulate_basic"]}

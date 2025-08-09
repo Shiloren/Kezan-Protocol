@@ -1,0 +1,35 @@
+name: Agents Policy
+'on':
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify AGENTS.md exists
+        run: |
+          test -f AGENTS.md || (echo "AGENTS.md missing" && exit 1)
+      - name: Detect code changes require changelog
+        id: diff
+        run: |
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          BASE="${{ github.base_ref }}"
+          CHANGED=$(git diff --name-only "origin/$BASE"...HEAD)
+          echo "$CHANGED" > changed.txt
+      - name: Enforce CHANGELOG for code changes
+        run: |
+          if grep -E '^(kezan/|frontend/|templates/|installer/|main.py)' changed.txt; then
+            if ! git diff --name-only "origin/${{ github.base_ref }}"...HEAD | grep -q '^CHANGELOG.md$'; then
+              echo "Code changes detected but CHANGELOG.md not updated" && exit 1
+            fi
+          fi
+      - name: Require ROADMAP update when code/docs change (ignore temp_flow)
+        run: |
+          CHANGED=$(cat changed.txt)
+          # Si solo cambió docs/temp_flow, no exigimos ROADMAP
+          if echo "$CHANGED" | grep -v '^docs/temp_flow/' | grep -E '^(kezan/|frontend/|templates/|installer/|main.py|docs/[^t])' >/dev/null; then
+            if ! echo "$CHANGED" | grep -E '^docs/ROADMAP\.md$' >/dev/null; then
+              echo "Relevant changes detected but docs/ROADMAP.md not updated" && exit 1
+            fi
+          fi

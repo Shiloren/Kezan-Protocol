@@ -298,3 +298,21 @@ WITH PRIORITY=76
 - Panel “Hoy, haz esto”: lista de recomendaciones con por qué, cómo y botones: Abrir AH / Copiar precio.
 - Chat IA in‑game: preguntas/respuestas, siempre asesoría.
 - Indicadores de cumplimiento: “⚖️ Modo asesor” en todo momento.
+
+---
+
+## 10. Roadmap de features (estado)
+
+Usa este apartado para listar y seguir el estado de futuras features. Marcas:
+- [ ] Pendiente
+- [~] En desarrollo
+- [x] Completado
+
+Backlog inicial:
+- [ ] Arbitraje multi‑reino con sugerencias de transferencia (informativo, asesoría)
+- [ ] Integración avanzada de crafting (sustitutos dinámicos y subproductos)
+- [ ] Simulaciones batch desde UI con reporte visual
+- [ ] Panel PWA con alertas push y watchlist
+- [~] Import perezoso/optimizaciones en análisis (NumPy, cachés) – parcialmente aplicado
+- [ ] Generador de reglas DSL asistido por IA (wizard)
+- [ ] Embeddings para contexto externo (parches/noticias) con filtros de seguridad

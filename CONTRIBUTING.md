@@ -70,13 +70,25 @@ python .\docs\generate_documents.py
 2. Implementa con tests y docstrings.
 3. Ejecuta linters y tests con cobertura.
 4. Actualiza README/Docs si cambia el uso o configuración.
-5. Abre PR con resumen, impacto, y resultados de tests/cobertura.
+5. Añade entrada en `CHANGELOG.md` (versión + fecha + bullets) para cualquier cambio visible (feat/fix/perf/docs/tests/chore).
+6. Abre PR con resumen, impacto, y resultados de tests/cobertura.
 
 Checklist de PRs:
 - [ ] Alineado con `docs/kezan_protocol_master_prompt.md` (visión/arquitectura/DSL)
 - [ ] Tests añadidos/actualizados y cobertura ≥95% si aplica
 - [ ] Sin romper API pública; anota breaking changes si existen
 - [ ] README/Docs actualizados
+- [ ] CHANGELOG.md actualizado
+
+## Política de changelog y documentación
+- Todo cambio debe:
+	- Añadir una entrada en `CHANGELOG.md` (en la cabecera con versión/fecha y bullets).
+	- Actualizar README y `docs/` cuando se agregan features o cambian comandos/uso.
+	- Si impacta procesos de contribución, actualizar este archivo.
+
+## Tests marcados como skip (intencional)
+- `tests/test_market_optimizer_chunks_context.py`: marcado como `skip` por ser redundante con las pruebas actuales de `market_optimizer` y evitar duplicidad.
+- Bloque en `tests/test_coverage_uplift.py`: si `numpy` no está instalado, se hace `pytest.skip` para evitar dependencia dura en entornos mínimos. Esto es esperado.
 
 ## Reporte de bugs
 - Abre un issue con: descripción, pasos, esperado vs actual, logs y entorno.
