@@ -1,8 +1,7 @@
 # 🧠 Kezan Protocol
 
-Kezan Protocol es un asistente local que analiza la casa de subastas de World of Warcraft y genera recomendaciones de compra y venta usando modelos de lenguaje ejecutados en tu propio equipo.
-
 ## Índice
+- [Introducción](#introducción)
 - [Arquitectura](#arquitectura)
 - [Requisitos](#requisitos)
 - [Instalación](#instalación)
@@ -12,113 +11,127 @@ Kezan Protocol es un asistente local que analiza la casa de subastas de World of
   - [Interfaz de escritorio](#interfaz-de-escritorio)
 - [Flujo de datos paso a paso](#flujo-de-datos-paso-a-paso)
 - [Módulos principales](#módulos-principales)
-- [Generar documentación](#generar-documentación)
 - [Pruebas](#pruebas)
 - [Errores comunes](#errores-comunes)
 
+---
+
+## Introducción
+Kezan Protocol es una herramienta diseñada para analizar mercados virtuales en el universo de World of Warcraft (WoW). Inspirada en los goblins de Kezan, esta aplicación combina tecnología avanzada con un enfoque en maximizar ganancias virtuales. Ofrece una interfaz de usuario moderna y funcional, junto con una API REST para integraciones avanzadas.
+
+---
+
 ## Arquitectura
 
-1. **Extracción de datos** – `blizzard_api` obtiene un token OAuth y descarga las subastas del reino configurado.
-2. **Análisis de mercado** – `analyzer` filtra los lotes más rentables y los formatea con `formatter`.
-3. **Análisis de crafteo** – `crafting_analyzer` evalúa recetas usando precios de mercado.
-4. **IA local** – `llm_interface` envía los datos a un modelo local (Ollama, LM Studio, etc.) para producir recomendaciones en español.
-5. **API y UI** – `api` expone endpoints REST, `main` monta la app de FastAPI y la interfaz en `frontend/` (Tauri + React) consulta dichos endpoints ofreciendo una experiencia de escritorio.
-6. **Persistencia y utilidades** – `cache` almacena tokens y resultados, `context_memory` guarda históricos, `export` permite volcar datos a CSV/JSON y `logger` mantiene registros rotativos.
+1. **Extracción de datos**
+   - `blizzard_api`: Obtiene un token OAuth y descarga las subastas del reino configurado.
+
+2. **Análisis de mercado**
+   - `analyzer`: Filtra los lotes más rentables y los formatea con `formatter`.
+
+3. **Análisis de crafteo**
+   - `crafting_analyzer`: Evalúa recetas usando precios de mercado.
+
+4. **IA local**
+   - `llm_interface`: Envía los datos a un modelo local (Ollama, LM Studio, etc.) para producir recomendaciones en español.
+
+5. **API y UI**
+   - `api`: Expone endpoints REST.
+   - `frontend/`: Interfaz de usuario basada en Tauri + React.
+
+6. **Persistencia y utilidades**
+   - `cache`: Almacena tokens y resultados.
+   - `context_memory`: Guarda históricos.
+   - `export`: Permite volcar datos a CSV/JSON.
+   - `logger`: Mantiene registros rotativos.
+
+---
 
 ## Requisitos
+- **Backend**: Python 3.10+
+- **Frontend**: Node.js 16+, npm 8+
+- **Dependencias**: Ver `requirements.txt` y `package.json`.
 
-- Python 3.8–3.12
-- Dependencias listadas en `requirements.txt`
-- Credenciales de la API de Blizzard y un LLM local accesible por HTTP
+---
 
 ## Instalación
 
-```bash
-git clone https://github.com/.../Kezan-Protocol.git
-cd Kezan-Protocol
-pip install -r requirements.txt
-```
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Shiloren/Kezan-Protocol.git
+   cd Kezan-Protocol
+   ```
+
+2. Instala las dependencias del backend:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Instala las dependencias del frontend:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+---
 
 ## Configuración inicial
 
-1. Copia `example.env` a `.env` y completa tus datos.
-2. Ejecuta el inicializador para validar las credenciales:
+1. Crea un archivo `.env` basado en `example.env`.
+2. Configura las credenciales de la API de Blizzard (`BLIZZ_CLIENT_ID`, `BLIZZ_CLIENT_SECRET`).
 
-```bash
-python -m kezan.initializer
-```
-
-Este script comprueba las claves con Blizzard y almacena los valores en `.env`.
+---
 
 ## Ejecución
 
 ### API HTTP
-
-Inicia el servicio FastAPI:
-
+Ejecuta el backend con FastAPI:
 ```bash
-uvicorn main:app --reload
+python main.py
 ```
-
-Endpoints disponibles:
-
-- `GET /api/gangas` – lotes de subasta con mejor margen.
-- `GET /api/consejo` – recomendaciones de compra/venta usando la IA.
-- `GET /api/crafteables` – recetas rentables para una profesión.
 
 ### Interfaz de escritorio
-
-La interfaz moderna se construye con **Tauri + React** y consume las rutas API:
-
+Ejecuta la aplicación Tauri:
 ```bash
 cd frontend
-npm install
-npm run dev    # durante el desarrollo
-npm run build  # generar ejecutable
+npm run dev:tauri
 ```
+
+---
 
 ## Flujo de datos paso a paso
+1. El usuario inicia la aplicación.
+2. `blizzard_api` obtiene datos de subastas.
+3. `analyzer` y `crafting_analyzer` procesan los datos.
+4. `llm_interface` genera recomendaciones.
+5. Los resultados se muestran en la interfaz o se exponen vía API.
 
-1. **Token OAuth** – `get_access_token` solicita y cachea un token válido.
-2. **Descarga de subastas** – `fetch_auction_data` usa dicho token y almacena la respuesta cinco minutos.
-3. **Análisis** – `get_top_items` calcula margen estimado y devuelve los mejores lotes.
-4. **Formateo** – `format_for_ai` añade nombres legibles de los ítems y porcentajes.
-5. **Consulta IA** – `analyze_items_with_llm` envía la lista al modelo local y devuelve recomendaciones.
-6. **Respuesta API/GUI** – la ruta `/api/consejo` combina todo y la interfaz gráfica muestra el análisis.
+---
 
 ## Módulos principales
+- **`blizzard_api`**: Gestión de autenticación y descarga de datos.
+- **`analyzer`**: Análisis de subastas.
+- **`crafting_analyzer`**: Evaluación de recetas.
+- **`llm_interface`**: Integración con modelos de lenguaje.
+- **`frontend/`**: Interfaz de usuario.
 
-| Módulo | Descripción |
-|--------|-------------|
-| `blizzard_api` | OAuth2 y descarga de datos de subasta. |
-| `analyzer` | Filtra lotes con mayor margen. |
-| `crafting_analyzer` | Calcula costos y beneficio de recetas de profesiones. |
-| `llm_interface` | Comunicación con modelos de lenguaje locales. |
-| `formatter` | Normaliza datos para la IA y resuelve nombres de ítems. |
-| `cache` | Cache simple persistente con TTL. |
-| `context_memory` | Historial de análisis con políticas de limpieza. |
-| `export` | Exportación a JSON/CSV. |
-| `logger` | Configuración común de logging. |
-
-## Generar documentación
-
-La carpeta `docs/` contiene la documentación HTML. Para crear versiones en Word y PDF:
-
-```bash
-python docs/generate_documents.py
-```
-
-Los archivos se guardarán en `docs/documentacion_completa.docx` y `docs/documentacion_interna.pdf`.
+---
 
 ## Pruebas
-
-Ejecuta la suite de tests automatizados:
-
+Ejecuta las pruebas unitarias:
 ```bash
-pytest
+pytest tests/
 ```
 
-## Errores comunes
+---
 
-- **"Las claves de la API de Blizzard no están configuradas."** – asegúrate de que `.env` contiene `BLIZZ_CLIENT_ID` y `BLIZZ_CLIENT_SECRET`.
-- **"El modelo de IA local no está activo o no responde."** – confirma que el servicio en `LLM_API_URL` está en funcionamiento.
+## Errores comunes
+1. **Error de credenciales**:
+   - Asegúrate de configurar correctamente el archivo `.env`.
+
+2. **Problemas con dependencias**:
+   - Verifica que las versiones de Python y Node.js sean compatibles.
+
+---
+
+Este README proporciona una visión completa del proyecto, tanto para usuarios como para desarrolladores. Si necesitas más detalles, consulta la documentación en la carpeta `docs/`. ¡Disfruta explorando el mercado con Kezan Protocol! 🚀
